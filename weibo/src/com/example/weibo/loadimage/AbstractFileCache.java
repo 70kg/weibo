@@ -2,9 +2,6 @@ package com.example.weibo.loadimage;
 
 import java.io.File;
 
-
-
-
 import android.content.Context;
 import android.util.Log;
 

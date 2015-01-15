@@ -1,11 +1,5 @@
 package com.example.weibo.loadimage;
 
-import java.io.File;
-
-
-
-
-
 import android.content.Context;
 
 public class FileCache extends AbstractFileCache{

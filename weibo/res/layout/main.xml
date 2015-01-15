@@ -37,4 +37,10 @@
         android:layout_height="wrap_content"
         android:text="查看微博" />
 
+    <Button
+        android:id="@+id/animator_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Animator" />
+
 </LinearLayout>

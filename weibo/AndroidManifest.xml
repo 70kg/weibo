@@ -5,8 +5,8 @@
     android:versionName="1.0" >
 
     <uses-sdk
-        android:minSdkVersion="8"
-        android:targetSdkVersion="14" />
+        android:minSdkVersion="16"
+        android:targetSdkVersion="19" />
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
@@ -27,9 +27,10 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".WBAuthCodeActivity" />
-         <activity android:name=".weibolistActivity" />
-         <activity android:name=".CommentActivity" />
+        <activity android:name="com.example.from_sina.WBAuthCodeActivity" />
+        <activity android:name=".weibolistActivity" />
+        <activity android:name="com.example.test_new_function.Animator"/>
+        <activity android:name=".CommentActivity" />
     </application>
 
 </manifest>
