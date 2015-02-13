@@ -1,8 +1,9 @@
 package com.example.Util;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class Entity2 {
+public class Entity2 implements Serializable{
 
 	String name;
 	String content;

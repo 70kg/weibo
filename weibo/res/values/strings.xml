@@ -1,10 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
+    <string name="drawer_open">Open navigation drawer</string>
+    <string name="drawer_close">Close navigation drawer</string>
+     <string name="share">share</string>
     <string name="app_name">weibo</string>
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
- <!-- 功能列表 -->
+    <!-- 功能列表 -->
     <string name="weibosdk_demo_feature_oauth">微博授权</string>
     <string name="weibosdk_demo_feature_share">分享到微博</string>
     <string name="weibosdk_demo_feature_login_logout">登录注销按钮</string>
@@ -31,7 +34,7 @@
     <string name="weibosdk_demo_toast_obtain_code_success">获取 Code 成功</string>
     <string name="weibosdk_demo_toast_obtain_code_failed">获取 Code 失败</string>
     <string name="weibosdk_demo_toast_obtain_token_success">获取 Token 成功</string>
-    <string name="weibosdk_demo_toast_obtain_token_failed">获取 Token 失败</string>    
+    <string name="weibosdk_demo_toast_obtain_token_failed">获取 Token 失败</string>
 
     <!-- 分享微博入口界面 -->
     <string name="weibosdk_demo_is_support_sdk">当前微博客户端是否支持 SDK</string>
@@ -98,17 +101,17 @@
     <string name="weibosdk_demo_logout_success">已注销</string>
     <string name="weibosdk_demo_logout_failed">注销失败</string>
     <string name="weibosdk_demo_logout_failed_1">注销失败，请检查 Token 是否正确（一个 token 不能重复注销多次）</string>
-    
+
     <!-- OpenAPI -->
-	<string name="weibosdk_demo_openapi_revoke_auth_success">授权回收成功</string>
-	<string name="weibosdk_demo_openapi_revoke_auth_failed">授权回收失败</string>
+    <string name="weibosdk_demo_openapi_revoke_auth_success">授权回收成功</string>
+    <string name="weibosdk_demo_openapi_revoke_auth_failed">授权回收失败</string>
     <string name="weibosdk_demo_openapi_invite_uid_hint">请输入被邀请人的uid</string>
     <string name="weibosdk_demo_openapi_invite">邀请</string>
     <string name="weibosdk_demo_openapi_invite_success">发送邀请成功</string>
     <string name="weibosdk_demo_openapi_invite_failed">发送邀请失败</string>
     <string name="weibosdk_demo_access_token_is_empty">Access Token 不存在，请先登录</string>
-    
     <string name="weibosdk_demo_get_home_mblog">获取首页微博信息流</string>
     <string name="weibosdk_demo_get_comment">获取微博评论信息流</string>
-    <string name="weibosdk_demo_get_group">获取微博好友分组</string> 
+    <string name="weibosdk_demo_get_group">获取微博好友分组</string>
+
 </resources>
