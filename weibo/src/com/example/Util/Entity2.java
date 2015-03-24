@@ -9,25 +9,19 @@ public class Entity2 implements Serializable{
 	String content;
 	ArrayList<String> weibo_pic;
 	String user_pic;
-	Entity2 entity2;
 	public ArrayList<String> getWeibo_pic() {
 		return weibo_pic;
 	}
 	public void setWeibo_pic(ArrayList<String> weibo_pic) {
 		this.weibo_pic = weibo_pic;
 	}
-	public String getUser_picl() {
+	public String getUser_pic() {
 		return user_pic;
 	}
-	public void setUser_picl(String user_picl) {
+	public void setUser_pic(String user_picl) {
 		this.user_pic = user_picl;
 	}
-	public Entity2 getEntity2() {
-		return entity2;
-	}
-	public void setEntity2(Entity2 entity2) {
-		this.entity2 = entity2;
-	}
+
 	public String getName() {
 		return name;
 	}

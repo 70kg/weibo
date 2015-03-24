@@ -14,7 +14,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.Util.Entity;
-import com.example.adapter.Myadapter;
 import com.example.adapter.commentadapter;
 import com.example.from_sina.AccessTokenKeeper;
 import com.example.loadimage.ImageLoader;
@@ -79,9 +78,8 @@ public class CommentActivity extends Activity implements ILoadListener{
 		//控件赋值
 		nametextview.setText(currentweiboentity.getName());
 		contenttextview.setText(currentweiboentity.getContent());
-		if(currentweiboentity.getUser_picl() !=null){
-			//Log.e("log", "head v =" +currentweiboentity.getUser_picl());
-			mImageLoader.DisplayImage(currentweiboentity.getUser_picl(), current_weibo_user_pic, false);
+		if(currentweiboentity.getUser_pic() !=null){
+			mImageLoader.DisplayImage(currentweiboentity.getUser_pic(), current_weibo_user_pic, false);
 		}
 
 
@@ -164,8 +162,6 @@ public class CommentActivity extends Activity implements ILoadListener{
 		}
 	}
 
-
-
 	class ViewHolder{
 		TextView content;
 		ImageView image1;
@@ -178,14 +174,6 @@ public class CommentActivity extends Activity implements ILoadListener{
 		ImageView image8;
 		ImageView image9;
 	}
-
-
-
-
-
-
-
-
 
 
 	//显示List
@@ -218,12 +206,13 @@ public class CommentActivity extends Activity implements ILoadListener{
 			// TODO Auto-generated method stub
 			if (!TextUtils.isEmpty(response)) {
 				CommentList comments = CommentList.parse(response);
-				if(comments != null && comments.total_number > 0){
+				if(comments != null && comments.total_number > 0 ){
 					for(int i=0;i<comments.commentList.size();i++){
 						entity = new Entity();
+						entity.setComments_counts(comments.total_number);
 						entity.setName(comments.commentList.get(i).user.screen_name);
 						entity.setContent(comments.commentList.get(i).text);
-						entity.setUser_picl(comments.commentList.get(i).user.profile_image_url);
+						entity.setUser_pic(comments.commentList.get(i).user.profile_image_url);
 						list.add(entity);
 					}
 					adapter.onDateChange(list);

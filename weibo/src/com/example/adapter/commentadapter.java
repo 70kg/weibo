@@ -61,15 +61,15 @@ public class commentadapter extends BaseAdapter{
 		holder.content = (TextView)convertView.findViewById(R.id.comment_content);
 		holder.name= (TextView)convertView.findViewById(R.id.comment_name);
 		holder.pic = (ImageView)convertView.findViewById(R.id.comment_pic);
-		
+
 		holder.name.setText(entity.getName());
 		holder.content.setText(entity.getContent());
-		mImageLoader.DisplayImage(entity.getUser_picl(), holder.pic, false);
+		mImageLoader.DisplayImage(entity.getUser_pic(), holder.pic, false);
 		return convertView;
 	}
-class ViewHolder{
-	ImageView pic;
-	TextView name;
-	TextView content;
-}
+	class ViewHolder{
+		ImageView pic;
+		TextView name;
+		TextView content;
+	}
 }

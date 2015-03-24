@@ -1,5 +1,6 @@
 package com.example.fragment;
 
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -10,7 +11,9 @@ import android.app.FragmentTransaction;
 import android.app.ActionBar.Tab;
 import android.content.Intent;
 import android.content.res.Configuration;
+import android.graphics.Matrix;
 import android.graphics.drawable.ColorDrawable;
+import android.net.wifi.WifiConfiguration.Status;
 import android.os.Bundle;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.app.Fragment;
@@ -19,19 +22,21 @@ import android.support.v4.view.ViewPager;
 import android.support.v4.view.ViewPager.OnPageChangeListener;
 import android.support.v4.widget.DrawerLayout;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.ShareActionProvider;
+import android.widget.Toast;
 import android.widget.AdapterView.OnItemClickListener;
 
 
 
 public class ActionBarTab extends FragmentActivity implements 	ActionBar.TabListener {
-   private String TAG = "ViewPager";
-	
+	private String TAG = "ViewPager";
+
 	SectionPagerAdapter mSectionPagerAdapter;
 
 	ViewPager mViewPager;
@@ -73,7 +78,8 @@ public class ActionBarTab extends FragmentActivity implements 	ActionBar.TabList
 		actionBar = getActionBar();
 		actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
 		actionBar.setDisplayHomeAsUpEnabled(true);
-
+		
+		//actionBar.setDisplayOptions(0);
 		mDrawerLayout = (DrawerLayout)findViewById(R.id.drawer_layout);
 
 		mActionBarDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout, 
@@ -81,30 +87,28 @@ public class ActionBarTab extends FragmentActivity implements 	ActionBar.TabList
 				R.string.drawer_close){
 			@Override
 			public void onDrawerClosed(View drawerView) {
-				// TODO Auto-generated method stub
-				super.onDrawerClosed(drawerView);
 				invalidateOptionsMenu();
 			}
 			@Override
 			public void onDrawerOpened(View drawerView) {
-				// TODO Auto-generated method stub
-				super.onDrawerOpened(drawerView);
+				
 				invalidateOptionsMenu();
 			}
+
 		};
 		mDrawerLayout.setDrawerListener(mActionBarDrawerToggle);
-     
-		
+
+
 		List<Fragment> fragments = new ArrayList<Fragment>();
 		fragments.add(new fragment1());
 		fragments.add(new fragment2());
 		fragments.add(new fragment_3());
-		
+
 		mSectionPagerAdapter = new SectionPagerAdapter(getSupportFragmentManager(),fragments);
 		mViewPager.setAdapter(mSectionPagerAdapter);
 		mViewPager.setPageTransformer(true, new DepthPageTransformer());
 		mViewPager.setOffscreenPageLimit(3);
-		
+
 		mViewPager.setOnPageChangeListener(new OnPageChangeListener() {
 
 			@Override
@@ -131,23 +135,60 @@ public class ActionBarTab extends FragmentActivity implements 	ActionBar.TabList
 			actionBar.addTab(actionBar.newTab().
 					setText(mSectionPagerAdapter.getPageTitle(i))
 					.setTabListener(this));
-			
+
 		}
+		enableEmbeddedTabs(actionBar);
+	}
+	private void enableEmbeddedTabs(Object actionBar){
+		try {
+			Method setHasEmbeddedTabsMethod = actionBar.getClass().getDeclaredMethod("setHasEmbeddedTabs", boolean.class);
+			setHasEmbeddedTabsMethod.setAccessible(true);
+			setHasEmbeddedTabsMethod.invoke(actionBar, true);
+			
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
+	}
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		 if (mActionBarDrawerToggle.onOptionsItemSelected(item)) {  
+	            return true;  
+	        }  
+		// TODO Auto-generated method stub
+		/*	boolean open = false;
+		switch (item.getItemId()) {
+		case android.R.id.home:
+			if(!open){
+				mDrawerLayout.openDrawer(Gravity.LEFT);
+				open = true;
+			}else{
+				mDrawerLayout.closeDrawers();
+				open = false;
+			}
+
+			break;
+
+		}*/
+
+		/*if(mActionBarDrawerToggle.onOptionsItemSelected(item)){
+			return true;
+		}*/
+		return super.onOptionsItemSelected(item);
 	}
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		getMenuInflater().inflate(R.menu.main, menu);
 
-	
-		MenuItem item = menu.findItem(R.id.action_share);
+
+		/*MenuItem item = menu.findItem(R.id.action_share);
 		ShareActionProvider provider = (ShareActionProvider) item
 				.getActionProvider();
-		
+
 		Intent intent = new Intent(Intent.ACTION_SEND);
 		intent.setType("text/plain");
 		intent.putExtra(Intent.EXTRA_SUBJECT, "share");
 		intent.putExtra(Intent.EXTRA_TEXT, "share by Action Provider");
-		provider.setShareIntent(intent);
+		provider.setShareIntent(intent);*/
 
 		return true;
 	}

@@ -27,6 +27,7 @@ import com.sina.weibo.sdk.openapi.models.StatusList;
 import com.sina.weibo.sdk.openapi.models.User;
 
 public class MainActivity extends Activity {
+	//com.example.fragment.ActionBarTab
 	Button button;
 	Button lookup;
 	Oauth2AccessToken token;

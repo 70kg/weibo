@@ -11,7 +11,6 @@ import com.example.from_sina.AccessTokenKeeper;
 import com.example.loadimage.ImageLoader;
 import com.example.weibo.R;
 import com.example.weibo.weibolist;
-import com.example.weibo.weibolistActivity;
 import com.example.weibo.weibolist.ILoadListener;
 import com.sina.weibo.sdk.auth.Oauth2AccessToken;
 import com.sina.weibo.sdk.exception.WeiboException;
@@ -109,9 +108,12 @@ public class fragment1 extends Fragment implements ILoadListener{
 							entity = new Entity();
 							entity.setName(statuses.statusList.get(i).user.screen_name);
 							entity.setContent(statuses.statusList.get(i).text);
-							entity.setUser_picl(statuses.statusList.get(i).user.profile_image_url);
+							entity.setUser_pic(statuses.statusList.get(i).user.profile_image_url);
 							entity.setWeibo_pic(statuses.statusList.get(i).pic_urls);
 							entity.setId(statuses.statusList.get(i).id);
+							entity.setReposts_count(statuses.statusList.get(i).reposts_count);
+							entity.setComments_counts(statuses.statusList.get(i).comments_count);
+							entity.setAttitudes_count(statuses.statusList.get(i).attitudes_count);
 							if(!(statuses.statusList.get(i).retweeted_status ==null)){
 								entity2 = new Entity2();
 								entity2.setName(statuses.statusList.get(i).retweeted_status.user.screen_name);

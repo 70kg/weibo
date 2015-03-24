@@ -79,7 +79,7 @@ public class Animator extends Activity implements View.OnClickListener{
 			}else{
 				closeanim();
 			}
-			
+
 			break;
 
 		default:
@@ -89,18 +89,18 @@ public class Animator extends Activity implements View.OnClickListener{
 
 	private void closeanim() {
 		for(int i=1;i<res.length;i++){
-AnimatorSet set = new AnimatorSet();
-			
-ObjectAnimator animator = ObjectAnimator.ofFloat(list.get(i), "translationX", 500F*(float)Math.cos(Math.toRadians(15*(i-1))),0F);
-ObjectAnimator animator1 = ObjectAnimator.ofFloat(list.get(i), "translationY", 500F*(float)Math.sin(Math.toRadians(15*(i-1))),0F);
+			AnimatorSet set = new AnimatorSet();
+
+			ObjectAnimator animator = ObjectAnimator.ofFloat(list.get(i), "translationX", 500F*(float)Math.cos(Math.toRadians(15*(i-1))),0F);
+			ObjectAnimator animator1 = ObjectAnimator.ofFloat(list.get(i), "translationY", 500F*(float)Math.sin(Math.toRadians(15*(i-1))),0F);
 			set.setDuration(500);
 			set.play(animator1).with(animator);
-			
+
 			set.setStartDelay(200);
 			set.start();
 			flag = true;
 		}
-		
+
 	}
 
 	private void startanim() {
@@ -108,7 +108,7 @@ ObjectAnimator animator1 = ObjectAnimator.ofFloat(list.get(i), "translationY", 5
 		for(int i=1;i<res.length;i++){
 			AnimatorSet set = new AnimatorSet();
 			System.out.println(500F*(float)Math.sin(Math.toRadians(15*i)));
-			
+
 			ObjectAnimator animator = ObjectAnimator.ofFloat(list.get(i), "translationX", 0F,500F*(float)Math.cos(Math.toRadians(15*(i-1))));
 			ObjectAnimator animator1 = ObjectAnimator.ofFloat(list.get(i), "translationY", 0F,500F*(float)Math.sin(Math.toRadians(15*(i-1))));
 			set.setDuration(500);

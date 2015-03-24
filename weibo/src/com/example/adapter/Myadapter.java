@@ -2,6 +2,8 @@ package com.example.adapter;
 
 import java.util.ArrayList;
 
+import org.w3c.dom.Text;
+
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -11,6 +13,7 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.Util.Entity;
 import com.example.loadimage.ImageLoader;
@@ -75,6 +78,13 @@ public class Myadapter extends BaseAdapter{
 		holder.name = (TextView)convertView.findViewById(R.id.name);
 		holder.content = (TextView)convertView.findViewById(R.id.content);
 		holder.image = (ImageView)convertView.findViewById(R.id.imageview);
+		holder.repost_counts = (TextView)convertView.findViewById(R.id.reposts_count);
+		holder.comment_counts = (TextView)convertView.findViewById(R.id.comment_count);
+		holder.attitudes_counts = (TextView)convertView.findViewById(R.id.attitudes_counts);
+		holder.repost_img = (ImageView)convertView.findViewById(R.id.repost_img);
+		holder.comments_img = (ImageView)convertView.findViewById(R.id.comment_img);
+		holder.attitudes_img = (ImageView)convertView.findViewById(R.id.attitudes_img);
+
 		holder.image1 = (ImageView)convertView.findViewById(R.id.weibo2_pic_1_1);
 		holder.image2 = (ImageView)convertView.findViewById(R.id.weibo2_pic_1_2);
 		holder.image3 = (ImageView)convertView.findViewById(R.id.weibo2_pic_1_3);
@@ -93,16 +103,34 @@ public class Myadapter extends BaseAdapter{
 
 		//控件赋值
 		String url="";
-		url = entity.getUser_picl();
+		url = entity.getUser_pic();
 		mImageLoader.DisplayImage(url, holder.image, false);
 		holder.content.setText(entity.getContent());		
 		holder.name.setText(entity.getName());
+		if(entity.getReposts_count() !=0){
+			holder.repost_counts.setText(entity.getReposts_count()+"");
+		}else{
+			holder.repost_img.setVisibility(View.GONE);
+		}
+		if(entity.getComments_counts() !=0){
+			holder.comment_counts.setText(entity.getComments_counts()+"");
+
+		}else{
+			holder.comments_img.setVisibility(View.GONE);
+		}
+		if(entity.getAttitudes_count()!=0){
+			holder.attitudes_counts.setText(entity.getAttitudes_count()+"");
+
+		}else{
+			holder.attitudes_img.setVisibility(View.GONE);
+		}
+
 		//微博配图
 		if(!(entity.getEntity2() ==null)){
 			display(holder, entity.getEntity2().getWeibo_pic());
 			holder.weibo2_content.setText( entity.getEntity2().getContent());
 			holder.weibo2_content.setVisibility(View.VISIBLE);
-			
+
 		}else{
 			View view = convertView.findViewById(R.id.weibo2_view);
 			view.setBackground(null);
@@ -114,11 +142,21 @@ public class Myadapter extends BaseAdapter{
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
+				//Toast.makeText(mContext, entity.getComments_counts(), 1500).show();
 				Intent intent = new Intent(mContext,CommentActivity.class);
 				Bundle bundle = new Bundle();
 				bundle.putSerializable("weibo", entity);
 				intent.putExtras(bundle);
 				mContext.startActivity(intent);
+
+			}
+		});
+		holder.image.setOnClickListener(new View.OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				Toast.makeText(mContext,entity.getName() , 1500).show();
 
 			}
 		});
@@ -175,6 +213,12 @@ public class Myadapter extends BaseAdapter{
 		TextView name;
 		TextView content;
 		ImageView image;
+		TextView repost_counts;
+		TextView comment_counts;
+		TextView attitudes_counts;
+		ImageView repost_img;
+		ImageView comments_img;
+		ImageView attitudes_img;
 		ImageView image1;
 		ImageView image2;
 		ImageView image3;

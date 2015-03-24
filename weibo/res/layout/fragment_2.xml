@@ -4,10 +4,11 @@
     android:layout_height="match_parent"
     android:orientation="vertical" >
 
-  <ImageView
-      android:id="@+id/imageView1"
-      android:layout_width="318dp"
-      android:layout_height="wrap_content"
-      android:src="@drawable/guide_image1" />
+    <com.example.weibo.weibolist
+        android:id="@+id/mention_me_listview"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:dividerHeight="17dp" >
+    </com.example.weibo.weibolist>
 
 </LinearLayout>

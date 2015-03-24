@@ -92,7 +92,7 @@ public class weibolistActivity extends Activity implements ILoadListener {
 							entity = new Entity();
 							entity.setName(statuses.statusList.get(i).user.screen_name);
 							entity.setContent(statuses.statusList.get(i).text);
-							entity.setUser_picl(statuses.statusList.get(i).user.profile_image_url);
+							entity.setUser_pic(statuses.statusList.get(i).user.profile_image_url);
 							entity.setWeibo_pic(statuses.statusList.get(i).pic_urls);
 							entity.setId(statuses.statusList.get(i).id);
 							if(!(statuses.statusList.get(i).retweeted_status ==null)){
