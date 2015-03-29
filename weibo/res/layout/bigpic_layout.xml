@@ -4,11 +4,12 @@
     android:layout_height="match_parent"
     android:orientation="vertical" >
 
-    <com.example.weibo.weibolist
-        android:id="@+id/mention_me_listview"
+    <com.example.bigpic.ZoomImageView
+        android:id="@+id/zoom_imageview"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        >
-    </com.example.weibo.weibolist>
+        android:scaleType="matrix"
+        />
+ 
 
 </LinearLayout>

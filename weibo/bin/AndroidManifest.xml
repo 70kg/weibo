@@ -31,6 +31,7 @@
         <activity android:name=".weibolistActivity" />
         <activity android:name="com.example.test_new_function.Animator"/>
         <activity android:name=".CommentActivity" />
+        <activity android:name="com.example.bigpic.BigPicActivity" />
     </application>
 
 </manifest>

@@ -9,6 +9,6 @@
 	<classpathentry exported="true" kind="con" path="com.android.ide.eclipse.adt.DEPENDENCIES"/>
 	<classpathentry exported="true" kind="lib" path="bin/weibosdk.jar"/>
 	<classpathentry exported="true" kind="lib" path="libs/weibosdkcore.jar"/>
-	<classpathentry kind="src" path="/appcompat_v7"/>
+	<classpathentry exported="true" kind="src" path="/appcompat_v7"/>
 	<classpathentry kind="output" path="bin/classes"/>
 </classpath>

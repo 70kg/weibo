@@ -7,8 +7,10 @@ import org.w3c.dom.Text;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
@@ -16,13 +18,14 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.Util.Entity;
+import com.example.bigpic.BigPicActivity;
 import com.example.loadimage.ImageLoader;
 import com.example.weibo.CommentActivity;
 import com.example.weibo.R;
 import com.example.weibo.R.id;
 import com.example.weibo.R.layout;
 
-public class Myadapter extends BaseAdapter{
+public class Myadapter extends BaseAdapter implements OnClickListener{
 	ArrayList<Entity> list;
 	LayoutInflater inflater;
 	//关于图片的异步加载
@@ -124,7 +127,7 @@ public class Myadapter extends BaseAdapter{
 		}else{
 			holder.attitudes_img.setVisibility(View.GONE);
 		}
-
+		//Log.e("entity.getWeibo_pic()", entity.getWeibo_pic()+"");
 		//微博配图
 		if(!(entity.getEntity2() ==null)){
 			display(holder, entity.getEntity2().getWeibo_pic());
@@ -160,7 +163,83 @@ public class Myadapter extends BaseAdapter{
 
 			}
 		});
+		holder.image1.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				clickevent(entity, 0);
+
+			}
+		});
+		holder.image2.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				clickevent(entity, 1);
+				
+			}
+		});
+		holder.image3.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				clickevent(entity, 2);
+				
+			}
+		});
+		holder.image4.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				clickevent(entity, 3);
+				
+			}
+		});
+		holder.image5.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				clickevent(entity, 4);
+				
+			}
+		});
+		holder.image6.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				clickevent(entity, 5);
+				
+			}
+		});
+		holder.image7.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				clickevent(entity, 6);
+				
+			}
+		});
+		holder.image8.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				clickevent(entity, 7);
+				
+			}
+		});
+		holder.image9.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				clickevent(entity, 8);
+				
+			}
+		});
 		return convertView;
+	}
+	//图片的点击事件
+	private void clickevent(Entity entity,int i){
+		ArrayList<String> pic_urls;
+		if(entity.getEntity2()== null){
+			pic_urls = entity.getWeibo_pic();
+		}else{
+			pic_urls = entity.getEntity2().getWeibo_pic();
+		}
+		Intent intent = new Intent(mContext,BigPicActivity.class);
+		intent.putExtra("id", i);
+		intent.putStringArrayListExtra("pic_urls", pic_urls);
+		mContext.startActivity(intent);
 	}
 	private void display(ViewHolder holder,ArrayList<String> pic2){
 		if(pic2 !=null){
@@ -229,6 +308,35 @@ public class Myadapter extends BaseAdapter{
 		ImageView image8;
 		ImageView image9;
 		TextView weibo2_content;
+	}
+	@Override
+	public void onClick(View v) {
+		switch (v.getId()) {
+		case R.id.weibo2_pic_1_1:
+			Toast.makeText(mContext, "peitu", 1500).show();
+			break;
+
+		default:
+			break;
+		}
+	}
+	/**
+	 * 将多图缩略图地址改为原始图片地址
+	 * @param thumbnail_url
+	 * @return
+	 */
+	private ArrayList<String> ReplaceUrl(ArrayList<String> thumbnail_url){
+		ArrayList<String> lage_url = null ;
+		if(thumbnail_url !=null){
+			for(int i=0;i<thumbnail_url.size();i++){
+				String url = thumbnail_url.get(i);
+				String url1 = url.replaceAll("thumbnail", "large");
+				lage_url.add(url1);
+			}
+		}
+
+		return lage_url;
+
 	}
 
 }

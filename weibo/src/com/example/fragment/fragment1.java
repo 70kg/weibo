@@ -111,6 +111,7 @@ public class fragment1 extends Fragment implements ILoadListener{
 							entity.setUser_pic(statuses.statusList.get(i).user.profile_image_url);
 							entity.setWeibo_pic(statuses.statusList.get(i).pic_urls);
 							entity.setId(statuses.statusList.get(i).id);
+							entity.setYuanshi_pic(statuses.statusList.get(i).original_pic);
 							entity.setReposts_count(statuses.statusList.get(i).reposts_count);
 							entity.setComments_counts(statuses.statusList.get(i).comments_count);
 							entity.setAttitudes_count(statuses.statusList.get(i).attitudes_count);

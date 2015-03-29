@@ -1,6 +1,7 @@
 package com.example.weibo;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -56,6 +57,7 @@ public class weibolist extends ListView implements OnScrollListener {
 		LayoutInflater inflater = LayoutInflater.from(context);
 		footer = inflater.inflate(R.layout.footer, null);
 		footer.findViewById(R.id.load_layout).setVisibility(View.GONE);
+		//this.setBackgroundColor(Color.WHITE);
 		this.addFooterView(footer);
 
 		this.setOnScrollListener(this);
