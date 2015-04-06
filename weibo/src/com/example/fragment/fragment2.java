@@ -75,7 +75,7 @@ public class fragment2 extends Fragment implements ILoadListener{
 
 	private void getDate() {
 		// TODO Auto-generated method stub
-
+		//mStatusesAPI.mentions(0L, 0L, 20, 1, 0, 0, 0, false, mListener);
 	}
 
 	@Override

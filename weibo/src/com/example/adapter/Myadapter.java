@@ -19,6 +19,7 @@ import android.widget.Toast;
 
 import com.example.Util.Entity;
 import com.example.bigpic.BigPicActivity;
+import com.example.bigpic.BigPicActivity1;
 import com.example.loadimage.ImageLoader;
 import com.example.weibo.CommentActivity;
 import com.example.weibo.R;
@@ -127,7 +128,6 @@ public class Myadapter extends BaseAdapter implements OnClickListener{
 		}else{
 			holder.attitudes_img.setVisibility(View.GONE);
 		}
-		//Log.e("entity.getWeibo_pic()", entity.getWeibo_pic()+"");
 		//微博配图
 		if(!(entity.getEntity2() ==null)){
 			display(holder, entity.getEntity2().getWeibo_pic());
@@ -236,7 +236,7 @@ public class Myadapter extends BaseAdapter implements OnClickListener{
 		}else{
 			pic_urls = entity.getEntity2().getWeibo_pic();
 		}
-		Intent intent = new Intent(mContext,BigPicActivity.class);
+		Intent intent = new Intent(mContext,BigPicActivity1.class);
 		intent.putExtra("id", i);
 		intent.putStringArrayListExtra("pic_urls", pic_urls);
 		mContext.startActivity(intent);

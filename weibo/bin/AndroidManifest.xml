@@ -31,7 +31,10 @@
         <activity android:name=".weibolistActivity" />
         <activity android:name="com.example.test_new_function.Animator"/>
         <activity android:name=".CommentActivity" />
-        <activity android:name="com.example.bigpic.BigPicActivity" />
+        <activity android:name="com.example.bigpic.BigPicActivity" 
+             android:theme="@style/Theme.Translucent"/>
+        <activity android:name="com.example.bigpic.BigPicActivity1" 
+             android:theme="@style/Theme.Translucent"/>
     </application>
 
 </manifest>

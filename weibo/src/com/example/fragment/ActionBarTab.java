@@ -11,6 +11,7 @@ import android.app.FragmentTransaction;
 import android.app.ActionBar.Tab;
 import android.content.Intent;
 import android.content.res.Configuration;
+import android.graphics.Color;
 import android.graphics.Matrix;
 import android.graphics.drawable.ColorDrawable;
 import android.net.wifi.WifiConfiguration.Status;
@@ -55,7 +56,7 @@ public class ActionBarTab extends FragmentActivity implements 	ActionBar.TabList
 		super.onCreate(arg0);
 		setContentView(R.layout.action_main);
 
-		ColorDrawable drawable = new ColorDrawable(getResources().getColor(android.R.color.holo_orange_light));
+		ColorDrawable drawable = new ColorDrawable(Color.WHITE);
 
 		getActionBar().setBackgroundDrawable(drawable);
 

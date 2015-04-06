@@ -1,13 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical" >
-    
-   <com.example.weibo.weibolist
-        android:id="@+id/listview"
+    android:layout_height="match_parent" >
+
+    <com.example.colorfulload.PullToRefreshView
+        android:id="@+id/pull_refresh"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        >
-    </com.example.weibo.weibolist>
-</LinearLayout>
+        android:layout_height="match_parent" >
+
+        <com.example.autoloadlistview.AutoLoadListView
+            android:id="@+id/listview"
+            android:background="#ffffff"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" >
+        </com.example.autoloadlistview.AutoLoadListView>
+    </com.example.colorfulload.PullToRefreshView>
+
+</RelativeLayout>
