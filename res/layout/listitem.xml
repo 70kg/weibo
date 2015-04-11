@@ -72,7 +72,7 @@
         android:id="@+id/content"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:autoLink="web|phone|email"
+        android:autoLink="web"
         android:textColorLink="#0082CB" />
 
     <LinearLayout
@@ -88,7 +88,7 @@
             android:id="@+id/weibo2_content"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:autoLink="web|phone|email"
+            android:autoLink="web"
             android:textColorLink="#0082CB"
             android:textSize="18dp"
             android:visibility="gone" />
@@ -108,7 +108,8 @@
                     android:id="@+id/weibo2_pic_1_1"
                     android:layout_width="60dp"
                     android:layout_height="60dp"
-                    android:visibility="gone" />
+                      android:visibility="gone" 
+                   />
 
                 <ImageView
                     android:id="@+id/weibo2_pic_1_2"

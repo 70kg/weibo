@@ -6,6 +6,7 @@ import java.util.regex.Pattern;
 
 import org.w3c.dom.Text;
 
+import android.R.integer;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -17,6 +18,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.webkit.WebView.FindListener;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -36,8 +38,6 @@ import com.example.weibo.RoundImageView;
 public class Myadapter extends BaseAdapter implements OnClickListener{
 	ArrayList<Entity> list;
 	LayoutInflater inflater;
-	//关于图片的异步加载
-
 	private ImageLoader mImageLoader;
 
 	private Context mContext;
@@ -53,118 +53,294 @@ public class Myadapter extends BaseAdapter implements OnClickListener{
 	public ImageLoader getImageLoader(){
 		return mImageLoader;
 	}
-
-
-
 	public void onDateChange(ArrayList<Entity> list){
 		this.list=list;
 		this.notifyDataSetChanged();
 	}
 	@Override
 	public int getCount() {
-		// TODO Auto-generated method stub
 		return list.size();
 	}
-
 	@Override
 	public Object getItem(int position) {
-		// TODO Auto-generated method stub
 		return list.get(position);
 	}
-
 	@Override
 	public long getItemId(int position) {
-		// TODO Auto-generated method stub
 		return position;
 	}
 
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
-		// TODO Auto-generated method stub
 		final Entity entity = list.get(position);
 		ViewHolder holder;
-		//if(convertView ==null){
-		holder = new ViewHolder();
-		convertView = inflater.inflate(R.layout.listitem, null);
-		holder.name = (TextView)convertView.findViewById(R.id.name);
-		holder.content = (TextView)convertView.findViewById(R.id.content);
-		holder.image = (RoundImageView)convertView.findViewById(R.id.imageview);
-		holder.repost_counts = (TextView)convertView.findViewById(R.id.reposts_count);
-		holder.comment_counts = (TextView)convertView.findViewById(R.id.comment_count);
-		holder.attitudes_counts = (TextView)convertView.findViewById(R.id.attitudes_counts);
-		holder.repost_img = (ImageView)convertView.findViewById(R.id.repost_img);
-		holder.comments_img = (ImageView)convertView.findViewById(R.id.comment_img);
-		holder.attitudes_img = (ImageView)convertView.findViewById(R.id.attitudes_img);
+		if(convertView ==null){
+			holder = new ViewHolder();
+			convertView = inflater.inflate(R.layout.listitem, null);
+			holder.name = (TextView)convertView.findViewById(R.id.name);
+			holder.content = (TextView)convertView.findViewById(R.id.content);
+			holder.image = (RoundImageView)convertView.findViewById(R.id.imageview);
+			holder.repost_counts = (TextView)convertView.findViewById(R.id.reposts_count);
+			holder.comment_counts = (TextView)convertView.findViewById(R.id.comment_count);
+			holder.attitudes_counts = (TextView)convertView.findViewById(R.id.attitudes_counts);
+			holder.repost_img = (ImageView)convertView.findViewById(R.id.repost_img);
+			holder.comments_img = (ImageView)convertView.findViewById(R.id.comment_img);
+			holder.attitudes_img = (ImageView)convertView.findViewById(R.id.attitudes_img);
 
-		holder.image1 = (ImageView)convertView.findViewById(R.id.weibo2_pic_1_1);
-		holder.image2 = (ImageView)convertView.findViewById(R.id.weibo2_pic_1_2);
-		holder.image3 = (ImageView)convertView.findViewById(R.id.weibo2_pic_1_3);
-		holder.image4 = (ImageView)convertView.findViewById(R.id.weibo2_pic_2_1);
-		holder.image5 = (ImageView)convertView.findViewById(R.id.weibo2_pic_2_2);
-		holder.image6= (ImageView)convertView.findViewById(R.id.weibo2_pic_2_3);
-		holder.image7 = (ImageView)convertView.findViewById(R.id.weibo2_pic_3_1);
-		holder.image8 = (ImageView)convertView.findViewById(R.id.weibo2_pic_3_2);
-		holder.image9 = (ImageView)convertView.findViewById(R.id.weibo2_pic_3_3);
-		holder.weibo2_content = (TextView)convertView.findViewById(R.id.weibo2_content);
-		
-		
-		/*	
-           convertView.setTag(holder);
+			holder.image1 = (ImageView)convertView.findViewById(R.id.weibo2_pic_1_1);
+			holder.image2 = (ImageView)convertView.findViewById(R.id.weibo2_pic_1_2);
+			holder.image3 = (ImageView)convertView.findViewById(R.id.weibo2_pic_1_3);
+			holder.image4 = (ImageView)convertView.findViewById(R.id.weibo2_pic_2_1);
+			holder.image5 = (ImageView)convertView.findViewById(R.id.weibo2_pic_2_2);
+			holder.image6= (ImageView)convertView.findViewById(R.id.weibo2_pic_2_3);
+			holder.image7 = (ImageView)convertView.findViewById(R.id.weibo2_pic_3_1);
+			holder.image8 = (ImageView)convertView.findViewById(R.id.weibo2_pic_3_2);
+			holder.image9 = (ImageView)convertView.findViewById(R.id.weibo2_pic_3_3);
+			holder.weibo2_content = (TextView)convertView.findViewById(R.id.weibo2_content);
+
+			convertView.setTag(holder);
+			setTags(holder,entity);
 		}else{
 			holder = (ViewHolder)convertView.getTag();
-		}*/
+			holder.image1.setVisibility(View.GONE);
+			holder.image2.setVisibility(View.GONE);
+			holder.image3.setVisibility(View.GONE);
+			holder.image4.setVisibility(View.GONE);
+			holder.image5.setVisibility(View.GONE);
+			holder.image6.setVisibility(View.GONE);
+			holder.image7.setVisibility(View.GONE);
+			holder.image8.setVisibility(View.GONE);
+			holder.image9.setVisibility(View.GONE);
+			holder.repost_img.setVisibility(View.GONE);
+			holder.comments_img.setVisibility(View.GONE);
+			holder.attitudes_img.setVisibility(View.GONE);
+			holder.repost_counts.setVisibility(View.GONE);
+			holder.attitudes_counts.setVisibility(View.GONE);
+			holder.comment_counts.setVisibility(View.GONE);
+			setTags( holder,entity);
+		}
+		ToControltheAssignment(entity,holder,convertView);
+		ImageviewClickEvent(holder,entity);
+		return convertView;
+	}
+	/**
+	 * 控件赋值
+	 * @param entity
+	 * @param holder
+	 */
+	private void ToControltheAssignment(final Entity entity, ViewHolder holder,View convertView) {
+		
+		View view = convertView.findViewById(R.id.weibo2_view);
+		if(!(entity.getEntity2() ==null)){
+			if((String)holder.weibo2_content.getTag() ==entity.getEntity2().getContent()){
+				holder.weibo2_content.setText( entity.getEntity2().getContent());
+				extractMention2Link(holder.weibo2_content);
+				holder.weibo2_content.setAutoLinkMask(0x01);
+				holder.weibo2_content.setVisibility(View.VISIBLE);
+			}else{
+				holder.weibo2_content.setVisibility(View.GONE);
+			}
+			view.setBackgroundResource(R.drawable.popup);
+			display(holder, entity.getEntity2().getWeibo_pic(),convertView);
+		}else{
+			view.setBackground(null);
+			display(holder, entity.getWeibo_pic(),convertView);
+		}
 
-		//控件赋值
+	weibo_item = convertView.findViewById(R.id.weibo_item);
+	weibo_item.setOnClickListener(new View.OnClickListener() {
+
+		@Override
+		public void onClick(View v) {
+			Intent intent = new Intent(mContext,CommentActivity.class);
+			Bundle bundle = new Bundle();
+			bundle.putSerializable("weibo", entity);
+			intent.putExtras(bundle);
+			mContext.startActivity(intent);
+
+		}
+	});
+		
 		String url="";
 		url = entity.getUser_pic();
 		mImageLoader.DisplayImage(url, holder.image, false);
-		holder.content.setText(entity.getContent());		
+
+		holder.content.setText(entity.getContent());
+		extractMention2Link(holder.content);
+		holder.content.setAutoLinkMask(0x01);
 		holder.name.setText(entity.getName());
-		if(entity.getReposts_count() !=0){
+		//评论 转发 点赞--------------
+		
+		if(entity.getReposts_count() !=0&&(int)holder.repost_img.getTag()==entity.getReposts_count()){
+			holder.repost_counts.setVisibility(View.VISIBLE);
 			holder.repost_counts.setText(entity.getReposts_count()+"");
+			holder.repost_img.setVisibility(View.VISIBLE);
 		}else{
 			holder.repost_img.setVisibility(View.GONE);
 		}
-		if(entity.getComments_counts() !=0){
+		if(entity.getComments_counts() !=0&&(int)holder.comments_img.getTag()==entity.getComments_counts()){
+			holder.comment_counts.setVisibility(View.VISIBLE);
 			holder.comment_counts.setText(entity.getComments_counts()+"");
-
+			holder.comments_img.setVisibility(View.VISIBLE);
 		}else{
 			holder.comments_img.setVisibility(View.GONE);
 		}
-		if(entity.getAttitudes_count()!=0){
+		if(entity.getAttitudes_count()!=0&&(int)holder.attitudes_img.getTag()==entity.getAttitudes_count()){
+			holder.attitudes_counts.setVisibility(View.VISIBLE);
 			holder.attitudes_counts.setText(entity.getAttitudes_count()+"");
-
+			holder.attitudes_img.setVisibility(View.VISIBLE);
 		}else{
 			holder.attitudes_img.setVisibility(View.GONE);
 		}
-		//微博配图
-		if(!(entity.getEntity2() ==null)){
-			display(holder, entity.getEntity2().getWeibo_pic());
-			holder.weibo2_content.setText( entity.getEntity2().getContent());
-			holder.weibo2_content.setVisibility(View.VISIBLE);
+	}
+	/**
+	 * 设置Tags
+	 * @param holder
+	 * @param entity
+	 */
+	private void setTags(ViewHolder holder, Entity entity) {
+		if(entity.getAttitudes_count() !=0){
+			holder.attitudes_img.setTag(Integer.valueOf(entity.getAttitudes_count()));
+		}else{
+			holder.attitudes_img.setTag(null);
+		}
+		
+		if(entity.getComments_counts() !=0){
+			holder.comments_img.setTag(Integer.valueOf(entity.getComments_counts()));
+		}else{
+			holder.comments_img.setTag(null);
+		}
+		
+		if(entity.getReposts_count() !=0){
+			holder.repost_img.setTag(Integer.valueOf(entity.getReposts_count()));
+		}else{
+			holder.repost_img.setTag(null);
+		}
+		
+		if(!(entity.getEntity2()==null)){
+			holder.weibo2_content.setTag(String.valueOf(entity.getEntity2().getContent()));
+		}else{
+			holder.weibo2_content.setVisibility(View.GONE);
+		}
+		//-------------------
+		if(entity.getWeibo_pic()!=null){
+			holder.image1.setTag(String.valueOf(entity.getWeibo_pic().get(0)));
+		}else if(entity.getEntity2() !=null){
+			if(entity.getEntity2().getWeibo_pic()!=null){
+				holder.image1.setTag(String.valueOf(entity.getEntity2().getWeibo_pic().get(0)));
+			}
+		}else{
+			holder.image1.setTag(null);
+		}
+		//--------------------------------
+		if(entity.getWeibo_pic()!=null&&entity.getWeibo_pic().size()>=2){
+			holder.image2.setTag(String.valueOf(entity.getWeibo_pic().get(1)));
+		}else if(entity.getEntity2() !=null){
+			if(entity.getEntity2().getWeibo_pic()!=null&&entity.getEntity2().getWeibo_pic().size()>=2){
+				holder.image2.setTag(String.valueOf(entity.getEntity2().getWeibo_pic().get(1)));
+			}
 
 		}else{
-			View view = convertView.findViewById(R.id.weibo2_view);
-			view.setBackground(null);
-			display(holder, entity.getWeibo_pic());
+			holder.image2.setVisibility(View.GONE);
 		}
-		extractMention2Link(holder.content);
-		extractMention2Link(holder.weibo2_content);
-		weibo_item = (convertView).findViewById(R.id.weibo_item);
-		weibo_item.setOnClickListener(new View.OnClickListener() {
-
-			@Override
-			public void onClick(View v) {
-				// TODO Auto-generated method stub
-				//Toast.makeText(mContext, entity.getComments_counts(), 1500).show();
-				Intent intent = new Intent(mContext,CommentActivity.class);
-				Bundle bundle = new Bundle();
-				bundle.putSerializable("weibo", entity);
-				intent.putExtras(bundle);
-				mContext.startActivity(intent);
-
+		//--------------------------------
+		if(entity.getWeibo_pic()!=null&&entity.getWeibo_pic().size()>=3){
+			holder.image3.setTag(String.valueOf(entity.getWeibo_pic().get(2)));
+			holder.image3.setVisibility(View.VISIBLE);
+		}else if(entity.getEntity2() !=null){
+			if(entity.getEntity2().getWeibo_pic()!=null&&entity.getEntity2().getWeibo_pic().size()>=3){
+				holder.image3.setTag(String.valueOf(entity.getEntity2().getWeibo_pic().get(2)));
+				holder.image3.setVisibility(View.VISIBLE);
 			}
-		});
+
+		}else{
+			holder.image3.setVisibility(View.GONE);
+		}
+		//--------------------------------
+		if(entity.getWeibo_pic()!=null&&entity.getWeibo_pic().size()>=4){
+			holder.image4.setTag(String.valueOf(entity.getWeibo_pic().get(3)));
+			holder.image4.setVisibility(View.VISIBLE);
+		}else if(entity.getEntity2() !=null){
+			if(entity.getEntity2().getWeibo_pic()!=null&&entity.getEntity2().getWeibo_pic().size()>=4){
+				holder.image4.setTag(String.valueOf(entity.getEntity2().getWeibo_pic().get(3)));
+				holder.image4.setVisibility(View.VISIBLE);
+			}
+
+		}else{
+			holder.image4.setVisibility(View.GONE);
+		}
+		//--------------------------------
+		if(entity.getWeibo_pic()!=null&&entity.getWeibo_pic().size()>=5){
+			holder.image5.setTag(String.valueOf(entity.getWeibo_pic().get(4)));
+			holder.image5.setVisibility(View.VISIBLE);
+		}else if(entity.getEntity2() !=null){
+			if(entity.getEntity2().getWeibo_pic()!=null&&entity.getEntity2().getWeibo_pic().size()>=5){
+				holder.image5.setTag(String.valueOf(entity.getEntity2().getWeibo_pic().get(4)));
+				holder.image5.setVisibility(View.VISIBLE);
+			}
+
+		}else{
+			holder.image5.setVisibility(View.GONE);
+		}
+		//--------------------------------
+		if(entity.getWeibo_pic()!=null&&entity.getWeibo_pic().size()>=6){
+			holder.image6.setTag(String.valueOf(entity.getWeibo_pic().get(5)));
+			holder.image6.setVisibility(View.VISIBLE);
+		}else if(entity.getEntity2() !=null){
+			if(entity.getEntity2().getWeibo_pic()!=null&&entity.getEntity2().getWeibo_pic().size()>=6){
+				holder.image6.setTag(String.valueOf(entity.getEntity2().getWeibo_pic().get(5)));
+				holder.image6.setVisibility(View.VISIBLE);
+			}
+
+		}else{
+			holder.image6.setVisibility(View.GONE);
+		}
+		//--------------------------------
+		if(entity.getWeibo_pic()!=null&&entity.getWeibo_pic().size()>=7){
+			holder.image7.setTag(String.valueOf(entity.getWeibo_pic().get(6)));
+			holder.image7.setVisibility(View.VISIBLE);
+		}else if(entity.getEntity2() !=null){
+			if(entity.getEntity2().getWeibo_pic()!=null&&entity.getEntity2().getWeibo_pic().size()>=7){
+				holder.image7.setTag(String.valueOf(entity.getEntity2().getWeibo_pic().get(6)));
+				holder.image7.setVisibility(View.VISIBLE);
+			}
+
+		}else{
+			holder.image7.setVisibility(View.GONE);
+		}
+		//--------------------------------
+		if(entity.getWeibo_pic()!=null&&entity.getWeibo_pic().size()>=8){
+			holder.image8.setTag(String.valueOf(entity.getWeibo_pic().get(7)));
+			holder.image8.setVisibility(View.VISIBLE);
+		}else if(entity.getEntity2() !=null){
+			if(entity.getEntity2().getWeibo_pic()!=null&&entity.getEntity2().getWeibo_pic().size()>=8){
+				holder.image8.setTag(String.valueOf(entity.getEntity2().getWeibo_pic().get(7)));
+				holder.image8.setVisibility(View.VISIBLE);
+			}
+
+		}else{
+			holder.image8.setVisibility(View.GONE);
+		}
+		//--------------------------------
+		if(entity.getWeibo_pic()!=null&&entity.getWeibo_pic().size()>=9){
+			holder.image9.setTag(String.valueOf(entity.getWeibo_pic().get(8)));
+			holder.image9.setVisibility(View.VISIBLE);
+		}else if(entity.getEntity2() !=null){
+			if(entity.getEntity2().getWeibo_pic()!=null&&entity.getEntity2().getWeibo_pic().size()>=9){
+				holder.image9.setTag(String.valueOf(entity.getEntity2().getWeibo_pic().get(8)));
+				holder.image9.setVisibility(View.VISIBLE);
+			}
+
+		}else{
+			holder.image9.setVisibility(View.GONE);
+		}
+	}
+	/**
+	 * 图片的点击事件
+	 * @param holder
+	 * @param entity
+	 */
+	private void ImageviewClickEvent(ViewHolder holder,final Entity entity) {
 		holder.image.setOnClickListener(new View.OnClickListener() {
 
 			@Override
@@ -185,61 +361,60 @@ public class Myadapter extends BaseAdapter implements OnClickListener{
 			@Override
 			public void onClick(View v) {
 				clickevent(entity, 1);
-				
+
 			}
 		});
 		holder.image3.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
 				clickevent(entity, 2);
-				
+
 			}
 		});
 		holder.image4.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
 				clickevent(entity, 3);
-				
+
 			}
 		});
 		holder.image5.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
 				clickevent(entity, 4);
-				
+
 			}
 		});
 		holder.image6.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
 				clickevent(entity, 5);
-				
+
 			}
 		});
 		holder.image7.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
 				clickevent(entity, 6);
-				
+
 			}
 		});
 		holder.image8.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
 				clickevent(entity, 7);
-				
+
 			}
 		});
 		holder.image9.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
 				clickevent(entity, 8);
-				
+
 			}
 		});
-		return convertView;
+		
 	}
-	//图片的点击事件
 	private void clickevent(Entity entity,int i){
 		ArrayList<String> pic_urls;
 		if(entity.getEntity2()== null){
@@ -252,45 +427,84 @@ public class Myadapter extends BaseAdapter implements OnClickListener{
 		intent.putStringArrayListExtra("pic_urls", pic_urls);
 		mContext.startActivity(intent);
 	}
-	private void display(ViewHolder holder,ArrayList<String> pic2){
+	private void display(ViewHolder holder,ArrayList<String> pic2,View convertView){
 		if(pic2 !=null){
 			for (int i = 0; i < pic2.size(); i++) {
 				switch (i) {
-				case 0:				
-					holder.image1.setVisibility(View.VISIBLE);
-					mImageLoader.DisplayImage(pic2.get(i), holder.image1, false);
+				case 0:	
+					ImageView image = (ImageView) convertView.findViewWithTag(pic2.get(i));
+					if(image.getTag() ==pic2.get(i)){
+						holder.image1.setVisibility(View.VISIBLE);
+						mImageLoader.DisplayImage(pic2.get(i), image, false);	
+					}else{
+						image.setVisibility(View.GONE);
+					}
+
 					break;
 				case 1:
-					holder.image2.setVisibility(View.VISIBLE);
-					mImageLoader.DisplayImage(pic2.get(i), holder.image2, false);
+					if(holder.image2.getTag() ==pic2.get(i)){
+						holder.image2.setVisibility(View.VISIBLE);
+						mImageLoader.DisplayImage(pic2.get(i), holder.image2, false);	
+					}else{
+						holder.image2.setVisibility(View.GONE);
+					}
 					break;
 				case 2:
-					holder.image3.setVisibility(View.VISIBLE);
-					mImageLoader.DisplayImage(pic2.get(i), holder.image3, false);
+					if(holder.image3.getTag() ==pic2.get(i)){
+						holder.image3.setVisibility(View.VISIBLE);
+						mImageLoader.DisplayImage(pic2.get(i), holder.image3, false);	
+					}else{
+						holder.image3.setVisibility(View.GONE);
+					}
 					break;
 				case 3:
-					holder.image4.setVisibility(View.VISIBLE);
-					mImageLoader.DisplayImage(pic2.get(i), holder.image4, false);
+					if(holder.image4.getTag() ==pic2.get(i)){
+						holder.image4.setVisibility(View.VISIBLE);
+						mImageLoader.DisplayImage(pic2.get(i), holder.image4, false);	
+					}else{
+						holder.image4.setVisibility(View.GONE);
+					}
 					break;
 				case 4:
-					holder.image5.setVisibility(View.VISIBLE);
-					mImageLoader.DisplayImage(pic2.get(i), holder.image5, false);
+					if(holder.image5.getTag() ==pic2.get(i)){
+						holder.image5.setVisibility(View.VISIBLE);
+						mImageLoader.DisplayImage(pic2.get(i), holder.image5, false);	
+					}else{
+						holder.image5.setVisibility(View.GONE);
+					}
 					break;
 				case 5:
-					holder.image6.setVisibility(View.VISIBLE);
-					mImageLoader.DisplayImage(pic2.get(i), holder.image6, false);
+					if(holder.image6.getTag() ==pic2.get(i)){
+						holder.image6.setVisibility(View.VISIBLE);
+						mImageLoader.DisplayImage(pic2.get(i), holder.image6, false);	
+					}else{
+						holder.image6.setVisibility(View.GONE);
+					}
 					break;
 				case 6:
-					holder.image7.setVisibility(View.VISIBLE);
-					mImageLoader.DisplayImage(pic2.get(i), holder.image7, false);
+					if(holder.image7.getTag() ==pic2.get(i)){
+						holder.image7.setVisibility(View.VISIBLE);
+						mImageLoader.DisplayImage(pic2.get(i), holder.image7, false);	
+					}else{
+						holder.image7.setVisibility(View.GONE);
+					}
 					break;
 				case 7:
-					holder.image8.setVisibility(View.VISIBLE);
-					mImageLoader.DisplayImage(pic2.get(i), holder.image8, false);
+					if(holder.image8.getTag() ==pic2.get(i)){
+						holder.image8.setVisibility(View.VISIBLE);
+						mImageLoader.DisplayImage(pic2.get(i), holder.image8, false);	
+					}else{
+						holder.image8.setVisibility(View.GONE);
+					}
 					break;
 				case 8:
-					holder.image9.setVisibility(View.VISIBLE);
-					mImageLoader.DisplayImage(pic2.get(i), holder.image9, false);
+					ImageView image9 = (ImageView) convertView.findViewWithTag(pic2.get(i));
+					if(holder.image9.getTag() ==pic2.get(i)){
+						image9.setVisibility(View.VISIBLE);
+						mImageLoader.DisplayImage(pic2.get(i), image9, false);	
+					}else{
+						image9.setVisibility(View.GONE);
+					}
 					break;
 
 				default:
@@ -365,7 +579,7 @@ public class Myadapter extends BaseAdapter implements OnClickListener{
 		}, new TransformFilter() {
 			@Override
 			public String transformUrl(Matcher match, String url) {
-			//	Log.d(TAG, match.group(1));
+				//	Log.d(TAG, match.group(1));
 				return match.group(1); 
 			}
 		});
