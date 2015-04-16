@@ -36,7 +36,6 @@ public class MainActivity extends Activity {
 
 	Button  button4;
 	private static final String PREFERENCES_NAME = "com_weibo_sdk_android";
-
 	private static final String KEY_UID           = "uid";
 	private static final String KEY_ACCESS_TOKEN  = "access_token";
 	private static final String KEY_EXPIRES_IN    = "expires_in";
@@ -46,7 +45,7 @@ public class MainActivity extends Activity {
 	Button button3;
 	/** 用于获取微博信息流等操作的API */
 	private StatusesAPI mStatusesAPI;
-	
+
 	private Button animator_button;
 
 	@Override
@@ -66,9 +65,9 @@ public class MainActivity extends Activity {
 		updata();
 		button4 = (Button)findViewById(R.id.button4);
 		animator_button = (Button)findViewById(R.id.animator_button);
-		
+
 		animator_button.setOnClickListener(new View.OnClickListener() {
-			
+
 			@Override
 			public void onClick(View v) {
 				startActivity(new Intent(MainActivity.this,Animator.class));
@@ -84,31 +83,26 @@ public class MainActivity extends Activity {
 		});
 
 	}
+	//查看token
 	public void lookupToken(){
 		lookup = (Button)findViewById(R.id.button1);
 		lookup.setOnClickListener(new View.OnClickListener() {
 
 			@Override
 			public void onClick(View v) {
-
 				token=AccessTokenKeeper.readAccessToken(MainActivity.this);
 				String ui = token.getUid();
-				/* SharedPreferences pref = getSharedPreferences(PREFERENCES_NAME, Context.MODE_APPEND);
-				 String ui = pref.getString("uid", null);*/
 				Toast.makeText(MainActivity.this, ui, 1500).show();
-
-
 			}
 		});
 	}
+	//获得授权
 	public void start(){
 		button = (Button)findViewById(R.id.shouquan);
 		button.setOnClickListener(new View.OnClickListener() {
 
 			@Override
 			public void onClick(View v) {
-
-				Toast.makeText(MainActivity.this, "123", 1500).show();
 				startActivity(new Intent(MainActivity.this,WBAuthCodeActivity.class));
 			}
 		});
@@ -120,14 +114,12 @@ public class MainActivity extends Activity {
 
 			@Override
 			public void onClick(View v) {
-				// TODO Auto-generated method stub
 				if (token != null && token.isSessionValid()){
-					//token=AccessTokenKeeper.readAccessToken(MainActivity.this);
 					long uid = Long.parseLong(token.getUid());
 					mUsersAPI.show(uid, mListener);
 				}
 				else{
-					Toast.makeText(MainActivity.this, "345", 1500).show();
+					Toast.makeText(MainActivity.this, "没找到用户", 1500).show();
 				}
 
 			}
@@ -140,7 +132,6 @@ public class MainActivity extends Activity {
 		@Override
 		public void onComplete(String response) {
 			if (!TextUtils.isEmpty(response)) {
-
 				// 调用 User#parse 将JSON串解析成User对象
 				User user = User.parse(response);
 				if (user != null) {
@@ -160,14 +151,13 @@ public class MainActivity extends Activity {
 			Toast.makeText(MainActivity.this, info.toString(), Toast.LENGTH_LONG).show();
 		}
 	};
-
+	//发布微博
 	public void updata(){
 		button3 = (Button)findViewById(R.id.button3);
 		button3.setOnClickListener(new View.OnClickListener() {
 
 			@Override
 			public void onClick(View v) {
-				// TODO Auto-generated method stub
 				editView = (EditText)findViewById(R.id.editView);
 				String txt = editView.getText().toString();
 				mStatusesAPI.update(txt, null, null, mListener1);

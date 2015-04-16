@@ -3,17 +3,31 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent" >
 
-    <com.example.colorfulload.PullToRefreshView
-        android:id="@+id/pull_refresh"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent" >
+    <FrameLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" >
 
-        <com.example.autoloadlistview.AutoLoadListView
-            android:id="@+id/listview"
-            android:background="#ffffff"
+        <com.example.colorfulload.PullToRefreshView
+            android:id="@+id/pull_refresh"
             android:layout_width="match_parent"
             android:layout_height="match_parent" >
-        </com.example.autoloadlistview.AutoLoadListView>
-    </com.example.colorfulload.PullToRefreshView>
+
+            <com.example.autoloadlistview.AutoLoadListView
+                android:id="@+id/listview"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="#ffffff" >
+            </com.example.autoloadlistview.AutoLoadListView>
+        </com.example.colorfulload.PullToRefreshView>
+        
+        
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|right"
+            android:id="@+id/refresh_button"
+            android:background="@drawable/ic_refresh" />
+        
+    </FrameLayout>
 
 </RelativeLayout>

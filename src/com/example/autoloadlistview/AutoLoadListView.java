@@ -2,6 +2,8 @@ package com.example.autoloadlistview;
 
 import android.content.Context;
 import android.util.AttributeSet;
+import android.util.Log;
+import android.view.MotionEvent;
 import android.widget.AbsListView;
 import android.widget.AbsListView.OnScrollListener;
 import android.widget.ListView;
@@ -52,6 +54,7 @@ public class AutoLoadListView extends ListView implements OnScrollListener{
 	@Override
 	public void onScroll(AbsListView view, int firstVisibleItem,
 			int visibleItemCount, int totalItemCount) {
+		
 		this.lastVisibleItem = firstVisibleItem+visibleItemCount;
 		this.totalItemCount = totalItemCount;
 		if (mLoadingFooter.getState() == LoadingFooter.State.Loading
@@ -72,5 +75,8 @@ public class AutoLoadListView extends ListView implements OnScrollListener{
 	public interface OnLoadNextListener {
 		public void onLoadNext();
 	}
+	
+	
+	
 
 }

@@ -18,13 +18,40 @@
 
             <com.example.weibo.RoundImageView
                 android:id="@+id/imageview"
+                android:layout_marginLeft="5dp"
                 android:layout_width="50dp"
                 android:layout_height="50dp" />
 
-            <TextView
-                android:id="@+id/name"
+            <LinearLayout
+                android:layout_marginLeft="15dp"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:orientation="vertical" >
+
+                <TextView
+                    android:id="@+id/name"
+                    android:textSize="20sp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" >
+
+                    <TextView
+                        android:id="@+id/from_type"
+                        android:text="meizu_mx3"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+
+                    <TextView
+                        android:layout_marginLeft="15dp"
+                        android:id="@+id/time"
+                        android:text="13:19pm"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+                </LinearLayout>
+            </LinearLayout>
         </LinearLayout>
 
         <LinearLayout
@@ -108,8 +135,7 @@
                     android:id="@+id/weibo2_pic_1_1"
                     android:layout_width="60dp"
                     android:layout_height="60dp"
-                      android:visibility="gone" 
-                   />
+                    android:visibility="gone" />
 
                 <ImageView
                     android:id="@+id/weibo2_pic_1_2"

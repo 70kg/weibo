@@ -58,6 +58,7 @@ public class fragment_3 extends Fragment implements ILoadListener{
 		mCommentsAPI = new CommentsAPI(mAccessToken);
 		//控件初始化
 		commentlistview = (weibolist)rootview.findViewById(R.id.commentlistview);
+		getDate();
 		showListView(list);
 
 	}
@@ -72,7 +73,7 @@ public class fragment_3 extends Fragment implements ILoadListener{
 		}
 	}
 	private void getDate(){
-		
+		mCommentsAPI.timeline(0L, 0L, 20, page, false, listener);	
 	}
 
 	public RequestListener listener  = new RequestListener() {

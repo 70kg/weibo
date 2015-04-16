@@ -86,6 +86,8 @@ public class Myadapter extends BaseAdapter implements OnClickListener{
 			holder.repost_img = (ImageView)convertView.findViewById(R.id.repost_img);
 			holder.comments_img = (ImageView)convertView.findViewById(R.id.comment_img);
 			holder.attitudes_img = (ImageView)convertView.findViewById(R.id.attitudes_img);
+			holder.from_type = (TextView)convertView.findViewById(R.id.from_type);
+			holder.time = (TextView)convertView.findViewById(R.id.time);
 
 			holder.image1 = (ImageView)convertView.findViewById(R.id.weibo2_pic_1_1);
 			holder.image2 = (ImageView)convertView.findViewById(R.id.weibo2_pic_1_2);
@@ -129,7 +131,7 @@ public class Myadapter extends BaseAdapter implements OnClickListener{
 	 * @param holder
 	 */
 	private void ToControltheAssignment(final Entity entity, ViewHolder holder,View convertView) {
-		
+
 		View view = convertView.findViewById(R.id.weibo2_view);
 		if(!(entity.getEntity2() ==null)){
 			if((String)holder.weibo2_content.getTag() ==entity.getEntity2().getContent()){
@@ -147,20 +149,20 @@ public class Myadapter extends BaseAdapter implements OnClickListener{
 			display(holder, entity.getWeibo_pic(),convertView);
 		}
 
-	weibo_item = convertView.findViewById(R.id.weibo_item);
-	weibo_item.setOnClickListener(new View.OnClickListener() {
+		weibo_item = convertView.findViewById(R.id.weibo_item);
+		weibo_item.setOnClickListener(new View.OnClickListener() {
 
-		@Override
-		public void onClick(View v) {
-			Intent intent = new Intent(mContext,CommentActivity.class);
-			Bundle bundle = new Bundle();
-			bundle.putSerializable("weibo", entity);
-			intent.putExtras(bundle);
-			mContext.startActivity(intent);
+			@Override
+			public void onClick(View v) {
+				Intent intent = new Intent(mContext,CommentActivity.class);
+				Bundle bundle = new Bundle();
+				bundle.putSerializable("weibo", entity);
+				intent.putExtras(bundle);
+				mContext.startActivity(intent);
 
-		}
-	});
-		
+			}
+		});
+
 		String url="";
 		url = entity.getUser_pic();
 		mImageLoader.DisplayImage(url, holder.image, false);
@@ -169,8 +171,17 @@ public class Myadapter extends BaseAdapter implements OnClickListener{
 		extractMention2Link(holder.content);
 		holder.content.setAutoLinkMask(0x01);
 		holder.name.setText(entity.getName());
+		holder.name.getPaint().setFakeBoldText(true);//加粗
+		//设置时间和来源
+		holder.time.setText(entity.getTime().substring(10,16));
+		String type = entity.getFrom_type();
+		Pattern p = Pattern.compile("\\>(.*?)\\<");
+		Matcher m = p.matcher(type);
+		while(m.find()){
+			holder.from_type.setText(m.group(1));
+		}
 		//评论 转发 点赞--------------
-		
+
 		if(entity.getReposts_count() !=0&&(int)holder.repost_img.getTag()==entity.getReposts_count()){
 			holder.repost_counts.setVisibility(View.VISIBLE);
 			holder.repost_counts.setText(entity.getReposts_count()+"");
@@ -204,19 +215,19 @@ public class Myadapter extends BaseAdapter implements OnClickListener{
 		}else{
 			holder.attitudes_img.setTag(null);
 		}
-		
+
 		if(entity.getComments_counts() !=0){
 			holder.comments_img.setTag(Integer.valueOf(entity.getComments_counts()));
 		}else{
 			holder.comments_img.setTag(null);
 		}
-		
+
 		if(entity.getReposts_count() !=0){
 			holder.repost_img.setTag(Integer.valueOf(entity.getReposts_count()));
 		}else{
 			holder.repost_img.setTag(null);
 		}
-		
+
 		if(!(entity.getEntity2()==null)){
 			holder.weibo2_content.setTag(String.valueOf(entity.getEntity2().getContent()));
 		}else{
@@ -413,7 +424,7 @@ public class Myadapter extends BaseAdapter implements OnClickListener{
 
 			}
 		});
-		
+
 	}
 	private void clickevent(Entity entity,int i){
 		ArrayList<String> pic_urls;
@@ -533,6 +544,8 @@ public class Myadapter extends BaseAdapter implements OnClickListener{
 		ImageView image8;
 		ImageView image9;
 		TextView weibo2_content;
+		TextView from_type;
+		TextView time;
 	}
 	@Override
 	public void onClick(View v) {
@@ -579,7 +592,6 @@ public class Myadapter extends BaseAdapter implements OnClickListener{
 		}, new TransformFilter() {
 			@Override
 			public String transformUrl(Matcher match, String url) {
-				//	Log.d(TAG, match.group(1));
 				return match.group(1); 
 			}
 		});

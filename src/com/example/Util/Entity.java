@@ -13,6 +13,21 @@ public class Entity implements Serializable {
 	String user_pic;
 	ArrayList<String> original_pic;
 	String yuanshi_pic;
+	String from_type;
+	public String getFrom_type() {
+		return from_type;
+	}
+	public void setFrom_type(String from_type) {
+		this.from_type = from_type;
+	}
+	public String getTime() {
+		return time;
+	}
+	public void setTime(String time) {
+		this.time = time;
+	}
+	String time;
+	
 	public String getYuanshi_pic() {
 		return yuanshi_pic;
 	}
