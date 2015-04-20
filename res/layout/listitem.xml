@@ -3,7 +3,7 @@
     android:id="@+id/weibo_item"
     android:layout_width="fill_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/beijing"
+    android:background="@drawable/card_bg"
     android:focusable="false"
     android:orientation="vertical" >
 
@@ -14,25 +14,26 @@
         <LinearLayout
             android:id="@+id/user_lin"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" >
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp" >
 
             <com.example.weibo.RoundImageView
                 android:id="@+id/imageview"
-                android:layout_marginLeft="5dp"
                 android:layout_width="50dp"
-                android:layout_height="50dp" />
+                android:layout_height="50dp"
+                android:layout_marginLeft="5dp" />
 
             <LinearLayout
-                android:layout_marginLeft="15dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginLeft="7dp"
                 android:orientation="vertical" >
 
                 <TextView
                     android:id="@+id/name"
-                    android:textSize="20sp"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="wrap_content"
+                    android:textSize="20sp" />
 
                 <LinearLayout
                     android:layout_width="wrap_content"
@@ -40,16 +41,14 @@
 
                     <TextView
                         android:id="@+id/from_type"
-                        android:text="meizu_mx3"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content" />
 
                     <TextView
-                        android:layout_marginLeft="15dp"
                         android:id="@+id/time"
-                        android:text="13:19pm"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content" />
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="15dp" />
                 </LinearLayout>
             </LinearLayout>
         </LinearLayout>
@@ -57,6 +56,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
             android:layout_toRightOf="@id/user_lin"
             android:gravity="right" >
 
@@ -64,7 +64,7 @@
                 android:id="@+id/repost_img"
                 android:layout_width="20dp"
                 android:layout_height="20dp"
-                android:src="@drawable/repost" />
+                android:src="@drawable/ic_forward_grey600_48dp" />
 
             <TextView
                 android:id="@+id/reposts_count"
@@ -99,8 +99,15 @@
         android:id="@+id/content"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
         android:autoLink="web"
-        android:textColorLink="#0082CB" />
+        android:lineSpacingExtra="1dp"
+        android:lineSpacingMultiplier="1.1"
+        android:paddingLeft="5dp"
+        android:paddingRight="5dp"
+        android:textColorLink="#0082CB"
+        android:textSize="15sp"
+        android:textStyle="bold" />
 
     <LinearLayout
         android:id="@+id/weibo2_view"
@@ -116,8 +123,11 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:autoLink="web"
+            android:lineSpacingExtra="1dp"
+            android:lineSpacingMultiplier="1.1"
             android:textColorLink="#0082CB"
-            android:textSize="18dp"
+            android:textSize="13sp"
+            android:textStyle="bold"
             android:visibility="gone" />
 
         <LinearLayout
@@ -133,74 +143,94 @@
 
                 <ImageView
                     android:id="@+id/weibo2_pic_1_1"
-                    android:layout_width="60dp"
-                    android:layout_height="60dp"
+                    android:layout_width="114dp"
+                    android:layout_height="114dp"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/re_beijing"
                     android:visibility="gone" />
 
                 <ImageView
                     android:id="@+id/weibo2_pic_1_2"
-                    android:layout_width="60dp"
-                    android:layout_height="60dp"
+                    android:layout_width="114dp"
+                    android:layout_height="114dp"
                     android:layout_marginLeft="5dp"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/re_beijing"
                     android:visibility="gone" />
 
                 <ImageView
                     android:id="@+id/weibo2_pic_1_3"
-                    android:layout_width="60dp"
-                    android:layout_height="60dp"
+                    android:layout_width="114dp"
+                    android:layout_height="114dp"
                     android:layout_marginLeft="5dp"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/re_beijing"
                     android:visibility="gone" />
             </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
                 android:orientation="horizontal" >
 
                 <ImageView
                     android:id="@+id/weibo2_pic_2_1"
-                    android:layout_width="60dp"
-                    android:layout_height="60dp"
+                    android:layout_width="114dp"
+                    android:layout_height="114dp"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/re_beijing"
                     android:visibility="gone" />
 
                 <ImageView
                     android:id="@+id/weibo2_pic_2_2"
-                    android:layout_width="60dp"
-                    android:layout_height="60dp"
+                    android:layout_width="114dp"
+                    android:layout_height="114dp"
                     android:layout_marginLeft="5dp"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/re_beijing"
                     android:visibility="gone" />
 
                 <ImageView
                     android:id="@+id/weibo2_pic_2_3"
-                    android:layout_width="60dp"
-                    android:layout_height="60dp"
+                    android:layout_width="114dp"
+                    android:layout_height="114dp"
                     android:layout_marginLeft="5dp"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/re_beijing"
                     android:visibility="gone" />
             </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
                 android:orientation="horizontal" >
 
                 <ImageView
                     android:id="@+id/weibo2_pic_3_1"
-                    android:layout_width="60dp"
-                    android:layout_height="60dp"
+                    android:layout_width="114dp"
+                    android:layout_height="114dp"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/re_beijing"
                     android:visibility="gone" />
 
                 <ImageView
                     android:id="@+id/weibo2_pic_3_2"
-                    android:layout_width="60dp"
-                    android:layout_height="60dp"
+                    android:layout_width="114dp"
+                    android:layout_height="114dp"
                     android:layout_marginLeft="5dp"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/re_beijing"
                     android:visibility="gone" />
 
                 <ImageView
                     android:id="@+id/weibo2_pic_3_3"
-                    android:layout_width="60dp"
-                    android:layout_height="60dp"
+                    android:layout_width="114dp"
+                    android:layout_height="114dp"
                     android:layout_marginLeft="5dp"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/re_beijing"
                     android:visibility="gone" />
             </LinearLayout>
         </LinearLayout>

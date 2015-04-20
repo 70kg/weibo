@@ -13,9 +13,10 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <application
         android:allowBackup="true"
-        android:icon="@drawable/ic_launcher"
+        android:icon="@drawable/logo"
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
         <activity
@@ -31,6 +32,7 @@
         <activity android:name=".weibolistActivity" />
         <activity android:name="com.example.test_new_function.Animator"/>
         <activity android:name=".CommentActivity" />
+        <activity android:name="com.example.weibo.UploadWeiBo"></activity>
         <activity android:name="com.example.bigpic.BigPicActivity" 
              android:theme="@style/Theme.Translucent"/>
         <activity android:name="com.example.bigpic.BigPicActivity1" 

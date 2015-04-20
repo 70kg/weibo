@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
       <drawable name="translucent_background">#9000</drawable>      
+      <drawable name="action_bar_color">#77b0f1</drawable>      
 </resources>

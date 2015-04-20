@@ -7,6 +7,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -92,7 +93,10 @@ public class MainActivity extends Activity {
 			public void onClick(View v) {
 				token=AccessTokenKeeper.readAccessToken(MainActivity.this);
 				String ui = token.getUid();
-				Toast.makeText(MainActivity.this, ui, 1500).show();
+				String format = getString(R.string.weibosdk_demo_token_to_string_format_1);
+				Log.e("token.getToken()", token.getToken());
+				Log.e("uid", ui+"");
+				//Toast.makeText(MainActivity.this, String.format(format, token.getToken(), 1500).show();
 			}
 		});
 	}
@@ -116,6 +120,7 @@ public class MainActivity extends Activity {
 			public void onClick(View v) {
 				if (token != null && token.isSessionValid()){
 					long uid = Long.parseLong(token.getUid());
+					Log.e("uid", uid+"");
 					mUsersAPI.show(uid, mListener);
 				}
 				else{
@@ -125,32 +130,33 @@ public class MainActivity extends Activity {
 			}
 		});
 	}
-	/**
-	 * 微博 OpenAPI 回调接口。
-	 */
-	private RequestListener mListener = new RequestListener() {
-		@Override
-		public void onComplete(String response) {
-			if (!TextUtils.isEmpty(response)) {
-				// 调用 User#parse 将JSON串解析成User对象
-				User user = User.parse(response);
-				if (user != null) {
-					Toast.makeText(MainActivity.this, 
-							"获取User信息成功，用户昵称：" + user.screen_name, 
-							Toast.LENGTH_LONG).show();
-				} else {
-					Toast.makeText(MainActivity.this, response, Toast.LENGTH_LONG).show();
-				}
-			}
-		}
+	 /**
+     * 微博 OpenAPI 回调接口。
+     */
+    private RequestListener mListener = new RequestListener() {
+        @Override
+        public void onComplete(String response) {
+            if (!TextUtils.isEmpty(response)) {
+                //LogUtil.i(TAG, response);
+                // 调用 User#parse 将JSON串解析成User对象
+                User user = User.parse(response);
+                if (user != null) {
+                    Toast.makeText(MainActivity.this, 
+                            "获取User信息成功，用户昵称：" + user.screen_name, 
+                            Toast.LENGTH_LONG).show();
+                } else {
+                    Toast.makeText(MainActivity.this, response, Toast.LENGTH_LONG).show();
+                }
+            }
+        }
 
-		@Override
-		public void onWeiboException(WeiboException e) {
-
-			ErrorInfo info = ErrorInfo.parse(e.getMessage());
-			Toast.makeText(MainActivity.this, info.toString(), Toast.LENGTH_LONG).show();
-		}
-	};
+        @Override
+        public void onWeiboException(WeiboException e) {
+           // LogUtil.e(TAG, e.getMessage());
+            ErrorInfo info = ErrorInfo.parse(e.getMessage());
+            Toast.makeText(MainActivity.this, info.toString(), Toast.LENGTH_LONG).show();
+        }
+    };
 	//发布微博
 	public void updata(){
 		button3 = (Button)findViewById(R.id.button3);

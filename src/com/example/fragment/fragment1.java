@@ -3,6 +3,7 @@ package com.example.fragment;
 import java.util.ArrayList;
 
 import android.animation.ObjectAnimator;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
@@ -12,6 +13,7 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.View.OnLongClickListener;
 import android.view.View.OnTouchListener;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -19,6 +21,8 @@ import android.widget.Toast;
 
 import com.example.Util.Entity;
 import com.example.Util.Entity2;
+import com.example.Util.GetDataHelper;
+import com.example.Util.NetUtil;
 import com.example.adapter.Myadapter;
 import com.example.autoloadlistview.AutoLoadListView;
 import com.example.autoloadlistview.AutoLoadListView.OnLoadNextListener;
@@ -27,6 +31,7 @@ import com.example.colorfulload.PullToRefreshView.OnRefreshListener;
 import com.example.from_sina.AccessTokenKeeper;
 import com.example.loadimage.ImageLoader;
 import com.example.weibo.R;
+import com.example.weibo.UploadWeiBo;
 import com.example.weibo.weibolist.ILoadListener;
 import com.sina.weibo.sdk.auth.Oauth2AccessToken;
 import com.sina.weibo.sdk.exception.WeiboException;
@@ -46,25 +51,35 @@ public class fragment1 extends Fragment implements ILoadListener
 	private Oauth2AccessToken mAccessToken;
 	/** 用于获取微博信息流等操作的API */
 	private StatusesAPI mStatusesAPI;
-	Entity  entity;
-	Entity2 entity2;
-	int page =1;
-	Myadapter adapter;
-	AutoLoadListView listview;
-	Long Long_since_id;
-	String since_id;
-
+	private Entity  entity;
+	private Entity2 entity2;
+	private int page =1;
+	private Myadapter adapter;
+	private AutoLoadListView listview;
+	private Long Long_since_id;
+	private String since_id;
+	private View fuction_layout;
 	private ImageView refresh_button;
+	private ImageView add_button;
+	private ArrayList<Entity> mList = new ArrayList<Entity>();
+	GetDataHelper mDataHelper;
+	private ShowActionBar showActionBar;
+	private boolean actionbar_is_show =true;
 	private Handler handler = new Handler() {
 		public void handleMessage(android.os.Message msg) {
 			if(msg.what==MSG_REFRESH){
 				pullToRefreshView.setRefreshing(false);
 				try {
 					Long_since_id = Long.parseLong(since_id);
-				 } catch (Exception e) {
+				} catch (Exception e) {
 				}
-				mStatusesAPI.friendsTimeline(Long_since_id, 0L, 20, 1, false, 0, false, new_mListener);
-				adapter.onDateChange(list);
+				if(NetUtil.checkNet(getActivity())){
+					mStatusesAPI.friendsTimeline(Long_since_id, 0L, 20, 1, false, 0, false, new_mListener);
+					adapter.onDateChange(list);
+				}else{
+					Toast.makeText(getActivity(), "无网络链接", Toast.LENGTH_SHORT).show();
+				}
+				
 			}
 		}
 	};
@@ -101,18 +116,84 @@ public class fragment1 extends Fragment implements ILoadListener
 			isShow = true;	
 		}
 	}
-
+	/**
+	 * 显示add button 隐藏刷新按钮
+	 */
+	private void show_add_button(View view) {
+		ObjectAnimator.ofFloat(view, "translationX", 0.0F, 200.0F)  
+		.setDuration(800)  
+		.start();	
+		
+	}
+	/**
+	 * 刷新按钮回来
+	 * @param v
+	 */
+	private void show_refresh_button(View v) {
+		ObjectAnimator.ofFloat(v, "translationX", 200.0F, 0.0F)  
+		.setDuration(800)  
+		.start();
+		
+	}
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
 		super.onActivityCreated(savedInstanceState);
+		
 		// 获取当前已保存过的 Token
 		mAccessToken = AccessTokenKeeper.readAccessToken(getActivity());
 		// 对statusAPI实例化
 		mStatusesAPI = new StatusesAPI(mAccessToken);
+		mDataHelper = new GetDataHelper(getActivity());
+		
+		list = mDataHelper.restoreNlist();
+		Log.e("fragment中从文件恢复的list----",list+"");
 		//初始化控件
 		refresh_button = (ImageView)rootView.findViewById(R.id.refresh_button);
 		listview = (AutoLoadListView)rootView.findViewById(R.id.listview);
+		fuction_layout = rootView.findViewById(R.id.fuciton_layout);
+		add_button = (ImageView)rootView.findViewById(R.id.add_button);
+		if(!NetUtil.checkNet(getActivity())){
+			Toast.makeText(getActivity(), "无网络连接", Toast.LENGTH_SHORT).show();
+		}else{
+			getDate();
+		}
+		showListView(list);
+		/**
+		 * 发布微博
+		 */
+		add_button.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				show_refresh_button(refresh_button);
+				startActivity(new Intent(getActivity(),UploadWeiBo.class));
+			}
+		});
+		/*
+		 * 刷新按钮回来
+		 */
+		add_button.setOnLongClickListener(new OnLongClickListener() {
+			
+			@Override
+			public boolean onLongClick(View v) {
+				show_refresh_button(refresh_button);
+				return true;
+			}
+		});
+		/**
+		 * 长按显示add button
+		 */
+		refresh_button.setOnLongClickListener(new OnLongClickListener() {
+			
+			@Override
+			public boolean onLongClick(View v) {
+				// TODO Auto-generated method stub
+				show_add_button(v);
+				return true;
+			}
+		});
+		
 		/**
 		 * 点击回到最上面并刷新
 		 */
@@ -125,8 +206,8 @@ public class fragment1 extends Fragment implements ILoadListener
 			}
 		});
 		//将图标移到屏幕下面
-		ObjectAnimator.ofFloat(refresh_button, "translationY",0.0F,200.0F ).setDuration(0) .start(); 
-		ObjectAnimator.ofFloat(refresh_button, "translationX",0.0F,-50.0F ).setDuration(0) .start(); 
+		ObjectAnimator.ofFloat(fuction_layout, "translationY",0.0F,200.0F ).setDuration(0) .start(); 
+		ObjectAnimator.ofFloat(fuction_layout, "translationX",0.0F,-50.0F ).setDuration(0) .start(); 
 
 
 
@@ -156,10 +237,19 @@ public class fragment1 extends Fragment implements ILoadListener
 					}
 					if(y>downy){
 						//Log.e("下滑", "下滑");
-						backAnimator(refresh_button);
+						backAnimator(fuction_layout);
+						if(showActionBar!=null&&actionbar_is_show ==false){
+							showActionBar.Show();
+							actionbar_is_show = true;
+						}
+						
 					}else{
 						//Log.e("上滑", "上滑");
-						startAnimator(refresh_button);
+						startAnimator(fuction_layout);
+						if(showActionBar!=null&&actionbar_is_show ==true){
+							showActionBar.Hold();
+							actionbar_is_show = false;
+						}
 					}
 					break;
 				case MotionEvent.ACTION_UP:
@@ -177,8 +267,6 @@ public class fragment1 extends Fragment implements ILoadListener
 				onLoad();
 			}
 		});
-		getDate();
-		showListView(list);
 
 	}
 	//显示List
@@ -195,6 +283,7 @@ public class fragment1 extends Fragment implements ILoadListener
 	 */
 	private void getDate(){
 		//获取当前微博
+		list.clear();
 		mStatusesAPI.friendsTimeline(0L, 0L, 20, 1, false, 0, false, mListener);
 	}
 
@@ -231,7 +320,9 @@ public class fragment1 extends Fragment implements ILoadListener
 							list.add(entity);
 						}
 						adapter.onDateChange(list);
+						mDataHelper.saveNlist(list);
 					}
+					
 				}
 			}
 		}
@@ -245,7 +336,7 @@ public class fragment1 extends Fragment implements ILoadListener
 		entity = new Entity();
 		entity.setName(statuses.statusList.get(i).user.screen_name);
 		entity.setContent(statuses.statusList.get(i).text);
-		entity.setUser_pic(statuses.statusList.get(i).user.profile_image_url);
+		entity.setUser_pic(statuses.statusList.get(i).user.avatar_hd);
 		entity.setWeibo_pic(statuses.statusList.get(i).pic_urls);
 		entity.setId(statuses.statusList.get(i).id);
 		entity.setYuanshi_pic(statuses.statusList.get(i).original_pic);
@@ -284,6 +375,7 @@ public class fragment1 extends Fragment implements ILoadListener
 								list.add(i, entity);
 							}
 						}
+						mDataHelper.saveNlist(list);
 						Toast.makeText(getActivity(), "刷新"+statuses.statusList.size()+"条微博", Toast.LENGTH_SHORT).show();
 						adapter.onDateChange(list);
 					}
@@ -301,5 +393,14 @@ public class fragment1 extends Fragment implements ILoadListener
 			imageLoader.clearCache();
 		}
 		super.onDestroy();
+		mDataHelper.saveNlist(list);
 	}
+	public interface ShowActionBar{
+		public void Show();
+		public void Hold();
+	}
+	public void setShowActionBar(ShowActionBar actionBar){
+		this.showActionBar = actionBar;
+	}
+	
 }

@@ -21,7 +21,7 @@ public class ZoomImageView extends ImageView implements OnScaleGestureListener,
 OnTouchListener, ViewTreeObserver.OnGlobalLayoutListener
 {
 	private static final String TAG = ZoomImageView.class.getSimpleName();
-	public static final float SCALE_MAX = 4.0f;
+	public static final float SCALE_MAX = 5.0f;
 	private static final float SCALE_MID = 2.0f;
 	/**
 	 * 初始化时的缩放比例，如果图片宽或高大于屏幕，此值将小于0
@@ -359,7 +359,7 @@ OnTouchListener, ViewTreeObserver.OnGlobalLayoutListener
 			{
 				getParent().requestDisallowInterceptTouchEvent(true);
 			}
-			
+
 			float dx = x - mLastX;
 			float dy = y - mLastY;
 
@@ -458,18 +458,18 @@ OnTouchListener, ViewTreeObserver.OnGlobalLayoutListener
 			Drawable d = getDrawable();
 			if (d == null)
 				return;
-			//Log.e(TAG, d.getIntrinsicWidth() + " , " + d.getIntrinsicHeight());
 			int width = getWidth();
 			int height = getHeight();
 			// 拿到图片的宽和高
 			int dw = d.getIntrinsicWidth();
 			int dh = d.getIntrinsicHeight();
 			float scale = 1.0f;
-			// 如果图片的宽或者高大于屏幕，则缩放至屏幕的宽或者高
+			// 如果图片的宽大于屏幕，则缩放至屏幕的宽或者高
 			if (dw > width && dh <= height)
 			{
 				scale = width * 1.0f / dw;
 			}
+			//图片的高度大于屏幕  宽度小于屏幕
 			if (dh > height && dw <= width)
 			{
 				scale = width * 1.0f / dw;
@@ -481,11 +481,16 @@ OnTouchListener, ViewTreeObserver.OnGlobalLayoutListener
 			}
 			//如果图片的宽高都小于屏幕
 			if(dw<width&&dh<height){
-				scale = Math.min(width*1.0f/dw, height*1.0f/dh);
+				//微博一般的长图
+				if(dh>2*dw){
+					scale = width * 1.0f / dw;
+				}else{
+					scale = Math.min(width*1.0f/dw, height*1.0f/dh);
+				}
 			}
+
 			initScale = scale;
 
-			//Log.e(TAG, "initScale = " + initScale);
 			mScaleMatrix.postTranslate((width - dw) / 2, (height - dh) / 2);
 			mScaleMatrix.postScale(scale, scale, getWidth() / 2,
 					getHeight() / 2);

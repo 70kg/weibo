@@ -14,13 +14,16 @@ import android.text.util.Linkify;
 import android.text.util.Linkify.MatchFilter;
 import android.text.util.Linkify.TransformFilter;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.view.ViewGroup.LayoutParams;
 import android.webkit.WebView.FindListener;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -135,20 +138,44 @@ public class Myadapter extends BaseAdapter implements OnClickListener{
 		View view = convertView.findViewById(R.id.weibo2_view);
 		if(!(entity.getEntity2() ==null)){
 			if((String)holder.weibo2_content.getTag() ==entity.getEntity2().getContent()){
-				holder.weibo2_content.setText( entity.getEntity2().getContent());
+				holder.weibo2_content.setText("@"+entity.getEntity2().getName()+" :"+entity.getEntity2().getContent());
 				extractMention2Link(holder.weibo2_content);
 				holder.weibo2_content.setAutoLinkMask(0x01);
 				holder.weibo2_content.setVisibility(View.VISIBLE);
 			}else{
 				holder.weibo2_content.setVisibility(View.GONE);
 			}
-			view.setBackgroundResource(R.drawable.popup);
-			display(holder, entity.getEntity2().getWeibo_pic(),convertView);
+			//转发微博只有一张配图
+			if(entity.getEntity2().getWeibo_pic()!=null&&entity.getEntity2().getWeibo_pic().size()==1){
+				if(holder.image1.getTag() ==entity.getEntity2().getWeibo_pic().get(0)){
+					holder.image1.setVisibility(View.VISIBLE);
+					mImageLoader.DisplayImage(entity.getEntity2().getWeibo_pic().get(0).replace("thumbnail", "bmiddle"), holder.image1, false);	
+				}else{
+					holder.image1.setVisibility(View.GONE);
+				}
+			}else{
+				view.setBackgroundResource(R.drawable.popup);
+				display(holder, entity.getEntity2().getWeibo_pic(),convertView);
+			}
+
 		}else{
 			view.setBackground(null);
-			display(holder, entity.getWeibo_pic(),convertView);
-		}
+			//如果只有一张图片  显示大的
+			if(entity.getWeibo_pic()!=null&&entity.getWeibo_pic().size()==1){
+				if(holder.image1.getTag() ==entity.getWeibo_pic().get(0)){
+					holder.image1.setVisibility(View.VISIBLE);
+					mImageLoader.DisplayImage(entity.getWeibo_pic().get(0).replace("thumbnail", "bmiddle"), holder.image1, false);	
+				}else{
+					holder.image1.setVisibility(View.GONE);
+				}
+			}else{
+				display(holder, entity.getWeibo_pic(),convertView);
+			}
 
+		}
+		/**
+		 * 微博item设置点击事件
+		 */
 		weibo_item = convertView.findViewById(R.id.weibo_item);
 		weibo_item.setOnClickListener(new View.OnClickListener() {
 
@@ -439,14 +466,16 @@ public class Myadapter extends BaseAdapter implements OnClickListener{
 		mContext.startActivity(intent);
 	}
 	private void display(ViewHolder holder,ArrayList<String> pic2,View convertView){
+		String new_pic_url;
 		if(pic2 !=null){
 			for (int i = 0; i < pic2.size(); i++) {
+				new_pic_url=pic2.get(i).replace("thumbnail", "bmiddle");
 				switch (i) {
 				case 0:	
 					ImageView image = (ImageView) convertView.findViewWithTag(pic2.get(i));
 					if(image.getTag() ==pic2.get(i)){
 						holder.image1.setVisibility(View.VISIBLE);
-						mImageLoader.DisplayImage(pic2.get(i), image, false);	
+						mImageLoader.DisplayImage(new_pic_url, image, false);	
 					}else{
 						image.setVisibility(View.GONE);
 					}
@@ -455,7 +484,7 @@ public class Myadapter extends BaseAdapter implements OnClickListener{
 				case 1:
 					if(holder.image2.getTag() ==pic2.get(i)){
 						holder.image2.setVisibility(View.VISIBLE);
-						mImageLoader.DisplayImage(pic2.get(i), holder.image2, false);	
+						mImageLoader.DisplayImage(new_pic_url, holder.image2, false);	
 					}else{
 						holder.image2.setVisibility(View.GONE);
 					}
@@ -463,7 +492,7 @@ public class Myadapter extends BaseAdapter implements OnClickListener{
 				case 2:
 					if(holder.image3.getTag() ==pic2.get(i)){
 						holder.image3.setVisibility(View.VISIBLE);
-						mImageLoader.DisplayImage(pic2.get(i), holder.image3, false);	
+						mImageLoader.DisplayImage(new_pic_url, holder.image3, false);	
 					}else{
 						holder.image3.setVisibility(View.GONE);
 					}
@@ -471,7 +500,7 @@ public class Myadapter extends BaseAdapter implements OnClickListener{
 				case 3:
 					if(holder.image4.getTag() ==pic2.get(i)){
 						holder.image4.setVisibility(View.VISIBLE);
-						mImageLoader.DisplayImage(pic2.get(i), holder.image4, false);	
+						mImageLoader.DisplayImage(new_pic_url, holder.image4, false);	
 					}else{
 						holder.image4.setVisibility(View.GONE);
 					}
@@ -479,7 +508,7 @@ public class Myadapter extends BaseAdapter implements OnClickListener{
 				case 4:
 					if(holder.image5.getTag() ==pic2.get(i)){
 						holder.image5.setVisibility(View.VISIBLE);
-						mImageLoader.DisplayImage(pic2.get(i), holder.image5, false);	
+						mImageLoader.DisplayImage(new_pic_url, holder.image5, false);	
 					}else{
 						holder.image5.setVisibility(View.GONE);
 					}
@@ -487,7 +516,7 @@ public class Myadapter extends BaseAdapter implements OnClickListener{
 				case 5:
 					if(holder.image6.getTag() ==pic2.get(i)){
 						holder.image6.setVisibility(View.VISIBLE);
-						mImageLoader.DisplayImage(pic2.get(i), holder.image6, false);	
+						mImageLoader.DisplayImage(new_pic_url, holder.image6, false);	
 					}else{
 						holder.image6.setVisibility(View.GONE);
 					}
@@ -495,7 +524,7 @@ public class Myadapter extends BaseAdapter implements OnClickListener{
 				case 6:
 					if(holder.image7.getTag() ==pic2.get(i)){
 						holder.image7.setVisibility(View.VISIBLE);
-						mImageLoader.DisplayImage(pic2.get(i), holder.image7, false);	
+						mImageLoader.DisplayImage(new_pic_url, holder.image7, false);	
 					}else{
 						holder.image7.setVisibility(View.GONE);
 					}
@@ -503,7 +532,7 @@ public class Myadapter extends BaseAdapter implements OnClickListener{
 				case 7:
 					if(holder.image8.getTag() ==pic2.get(i)){
 						holder.image8.setVisibility(View.VISIBLE);
-						mImageLoader.DisplayImage(pic2.get(i), holder.image8, false);	
+						mImageLoader.DisplayImage(new_pic_url, holder.image8, false);	
 					}else{
 						holder.image8.setVisibility(View.GONE);
 					}
@@ -512,7 +541,7 @@ public class Myadapter extends BaseAdapter implements OnClickListener{
 					ImageView image9 = (ImageView) convertView.findViewWithTag(pic2.get(i));
 					if(holder.image9.getTag() ==pic2.get(i)){
 						image9.setVisibility(View.VISIBLE);
-						mImageLoader.DisplayImage(pic2.get(i), image9, false);	
+						mImageLoader.DisplayImage(new_pic_url, image9, false);	
 					}else{
 						image9.setVisibility(View.GONE);
 					}
@@ -576,16 +605,18 @@ public class Myadapter extends BaseAdapter implements OnClickListener{
 		return lage_url;
 
 	}
+	/**
+	 * 微博字符串处理
+	 * @param v
+	 */
 	public static void extractMention2Link(TextView v) {
 		v.setAutoLinkMask(0);
-
-		Pattern mentionsPattern = Pattern.compile("@(\\w+?)(?=\\W|$)(.)");
+		Pattern mentionsPattern = Pattern.compile("@(\\w+?\\-*?)(?=\\W|$)(.)");
 		String mentionsScheme = String.format("%s/?%s=", Defs.MENTIONS_SCHEMA, Defs.PARAM_UID);
 		Linkify.addLinks(v, mentionsPattern, mentionsScheme, new MatchFilter() {
 
 			@Override
 			public boolean acceptMatch(CharSequence s, int start, int end) {
-
 				return s.charAt(end-1) !='.';
 			}
 

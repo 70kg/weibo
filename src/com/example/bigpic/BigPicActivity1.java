@@ -83,8 +83,6 @@ public class BigPicActivity1  extends Activity {
 
 		mViewPager.setAdapter(new PagerAdapter() {
 
-
-
 			private AsyncImageLoader asyncImageLoader= new AsyncImageLoader();  
 
 			@Override
@@ -178,8 +176,6 @@ public class BigPicActivity1  extends Activity {
 					imageCallback.imageLoaded((Drawable) message.obj, imageUrl);
 				}
 			};
-
-
 			/**
 			 * 创建子线程访问网络并加载图片 ，把结果交给handler处理
 			 */
@@ -240,5 +236,6 @@ public class BigPicActivity1  extends Activity {
 		}
 
 	}
+
 	
 }

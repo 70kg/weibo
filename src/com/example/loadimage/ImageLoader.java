@@ -16,13 +16,14 @@ import java.util.concurrent.Executors;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.util.Log;
 import android.widget.ImageView;
 
 public class ImageLoader {
-	
+
 	private MemoryCache memoryCache = new MemoryCache();
 	private AbstractFileCache fileCache;
 	private Map<ImageView, String> imageViews = Collections
@@ -34,17 +35,46 @@ public class ImageLoader {
 		fileCache = new FileCache(context);
 		executorService = Executors.newFixedThreadPool(5);
 	}
-
+	//-----------
+	public static int calculateInSampleSize(BitmapFactory.Options options,  
+			int reqWidth, int reqHeight) {  
+		// 源图片的高度和宽度  
+		final int height = options.outHeight;  
+		final int width = options.outWidth;  
+		int inSampleSize = 1;  
+		if (height > reqHeight || width > reqWidth) {  
+			// 计算出实际宽高和目标宽高的比率  
+			final int heightRatio = Math.round((float) height / (float) reqHeight);  
+			final int widthRatio = Math.round((float) width / (float) reqWidth);  
+			// 选择宽和高中最小的比率作为inSampleSize的值，这样可以保证最终图片的宽和高  
+			// 一定都会大于等于目标的宽和高。  
+			inSampleSize = heightRatio < widthRatio ? heightRatio : widthRatio;  
+		}  
+		return inSampleSize;  
+	} 
+	public static Bitmap decodeSampledBitmapFromResource(Resources res, int resId,  
+			int reqWidth, int reqHeight) {  
+		// 第一次解析将inJustDecodeBounds设置为true，来获取图片大小  
+		final BitmapFactory.Options options = new BitmapFactory.Options();  
+		options.inJustDecodeBounds = true;  
+		// 调用上面定义的方法计算inSampleSize值  
+		options.inSampleSize = calculateInSampleSize(options, reqWidth, reqHeight);  
+		// 使用获取到的inSampleSize值再次解析图片  
+		options.inJustDecodeBounds = false;  
+		return BitmapFactory.decodeResource(res, resId, options);  
+	}
+	//---------------
 	// 鏈�富瑕佺殑鏂规硶
 	public void DisplayImage(String url, ImageView imageView, boolean isLoadOnlyFromCache) {
 		imageViews.put(imageView, url);
 		// 鍏堜粠鍐呭瓨缂撳瓨涓煡鎵�
 
 		Bitmap bitmap = memoryCache.get(url);
+
 		if (bitmap != null)
 			imageView.setImageBitmap(bitmap);
 		else if (!isLoadOnlyFromCache){
-			
+
 			// 鑻ユ病鏈夌殑璇濆垯寮�惎鏂扮嚎绋嬪姞杞藉浘鐗�
 			queuePhoto(url, imageView);
 		}
@@ -57,11 +87,11 @@ public class ImageLoader {
 
 	private Bitmap getBitmap(String url) {
 		File f = fileCache.getFile(url);
-		
+
 		// 鍏堜粠鏂囦欢缂撳瓨涓煡鎵炬槸鍚︽湁
 		Bitmap b = null;
 		if (f != null && f.exists()){
-			b = decodeFile(f);
+			b = decodeFile(f,200,200);
 		}
 		if (b != null){
 			return b;
@@ -79,7 +109,8 @@ public class ImageLoader {
 			OutputStream os = new FileOutputStream(f);
 			CopyStream(is, os);
 			os.close();
-			bitmap = decodeFile(f);
+			bitmap = decodeFile(f,200,200);
+			//-----------------------------------------------------------
 			return bitmap;
 		} catch (Exception ex) {
 			Log.e("", "getBitmap catch Exception...\nmessage = " + ex.getMessage());
@@ -88,14 +119,15 @@ public class ImageLoader {
 	}
 
 	// decode杩欎釜鍥剧墖骞朵笖鎸夋瘮渚嬬缉鏀句互鍑忓皯鍐呭瓨娑堣�锛岃櫄鎷熸満瀵规瘡寮犲浘鐗囩殑缂撳瓨澶у皬涔熸槸鏈夐檺鍒剁殑
-	private Bitmap decodeFile(File f) {
+	private Bitmap decodeFile(File f,int reqWidth, int reqHeight) {
 		try {
 			// decode image size
-			BitmapFactory.Options o = new BitmapFactory.Options();
-			o.inJustDecodeBounds = true;
-			BitmapFactory.decodeStream(new FileInputStream(f), null, o);
-
-			// Find the correct scale value. It should be the power of 2.
+			BitmapFactory.Options options = new BitmapFactory.Options();
+			options.inJustDecodeBounds = true;
+			BitmapFactory.decodeStream(new FileInputStream(f), null, options);
+			options.inSampleSize = calculateInSampleSize(options, reqWidth, reqHeight);  
+			options.inJustDecodeBounds = false;  
+			/*// Find the correct scale value. It should be the power of 2.
 			final int REQUIRED_SIZE = 500;
 			int width_tmp = o.outWidth, height_tmp = o.outHeight;
 			int scale = 1;
@@ -106,12 +138,12 @@ public class ImageLoader {
 				width_tmp /= 2;
 				height_tmp /= 2;
 				scale *= 2;
-			}
+			}*/
 
 			// decode with inSampleSize
-			BitmapFactory.Options o2 = new BitmapFactory.Options();
-			o2.inSampleSize = scale;
-			return BitmapFactory.decodeStream(new FileInputStream(f), null, o2);
+			//BitmapFactory.Options o2 = new BitmapFactory.Options();
+			//o2.inSampleSize = scale;
+			return BitmapFactory.decodeStream(new FileInputStream(f), null, options);
 		} catch (FileNotFoundException e) {
 		}
 		return null;
@@ -178,7 +210,7 @@ public class ImageLoader {
 				return;
 			if (bitmap != null)
 				photoToLoad.imageView.setImageBitmap(bitmap);
-	
+
 		}
 	}
 
