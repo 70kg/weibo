@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.example.weibo"
+    android:versionCode="1"
+    android:versionName="1.0" >
+
+    <uses-sdk
+        android:minSdkVersion="16"
+        android:targetSdkVersion="19" />
+
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <application
+        android:allowBackup="true"
+        android:icon="@drawable/logo"
+        android:label="@string/app_name"
+        android:theme="@style/AppTheme" >
+        <activity
+            android:name="com.example.fragment.ActionBarTab"
+            android:label="@string/app_name" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity android:name="com.example.from_sina.WBAuthCodeActivity" />
+        <activity android:name=".weibolistActivity" />
+        <activity android:name="com.example.test_new_function.Animator"/>
+        <activity android:name=".CommentActivity" />
+        <activity android:name="com.example.weibo.UploadWeiBo"></activity>
+        <activity android:name="com.example.bigpic.BigPicActivity" 
+             android:theme="@style/Theme.Translucent"/>
+        <activity android:name="com.example.bigpic.BigPicActivity1" 
+             android:theme="@style/Theme.Translucent"/>
+        <activity android:name="com.example.disposetext.MentionsActivity" >
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data
+                    android:host="sina_profile"
+                    android:scheme="devdiv" />
+            </intent-filter>
+        </activity>
+        <activity android:name="com.example.disposetext.TrendsActivity" >
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data
+                    android:host="sina_profile1"
+                    android:scheme="devdiv" />
+            </intent-filter>
+        </activity>
+        <activity android:name="com.example.weibo.DeclareCurrentWeiBo" >
+        </activity>
+    </application>
+
+</manifest>
