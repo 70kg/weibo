@@ -8,6 +8,7 @@ import android.graphics.Paint;
 import android.support.v4.view.ViewPager;
 import android.support.v4.view.ViewPager.OnPageChangeListener;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewTreeObserver.OnGlobalLayoutListener;
 import android.widget.LinearLayout;
@@ -16,8 +17,6 @@ public class TabBarView extends LinearLayout {
 	public interface IconTabProvider {
 		public int getPageIconResId(int position);
 	}
-
-
 	private static final int STRIP_HEIGHT = 6;
 
 	public final Paint mPaint;
@@ -48,15 +47,15 @@ public class TabBarView extends LinearLayout {
 	public TabBarView(Context context, AttributeSet attrs, int defStyle) {
 		super(context, attrs, defStyle);
 
-        setWillNotDraw(false);
+		setWillNotDraw(false);
 
 		mPaint = new Paint();
 		mPaint.setColor(Color.WHITE);
 		mPaint.setAntiAlias(true);
 
 		mStripHeight = (int) (STRIP_HEIGHT * getResources().getDisplayMetrics().density + .5f);
-}
-	
+	}
+
 	public void setStripColor(int color) {
 		if (mPaint.getColor() != color) {
 			mPaint.setColor(color);
@@ -100,11 +99,13 @@ public class TabBarView extends LinearLayout {
 		int height = getHeight();
 		if (child != null) {
 			float left = child.getLeft();
+			//Log.e("child.getLeft()==========", child.getLeft()+"");
 			float right = child.getRight();
 			if (mOffset >  0f && mSelectedTab < tabCount - 1 ) {
 				nextChild = getChildAt(mSelectedTab + 1);
 				if (nextChild != null) {
 					final float nextTabLeft = nextChild.getLeft();
+					//Log.e("nextChild.getLeft()==========", nextChild.getLeft()+"");
 					final float nextTabRight = nextChild.getRight();
 					left =  (mOffset * nextTabLeft + (1f - mOffset) * left);
 					right = (mOffset * nextTabRight + (1f - mOffset) * right);
@@ -125,7 +126,7 @@ public class TabBarView extends LinearLayout {
 
 		notifyDataSetChanged();
 	}
-	
+
 	private class PageListener implements OnPageChangeListener {
 
 		@Override
@@ -133,7 +134,7 @@ public class TabBarView extends LinearLayout {
 
 			mSelectedTab = position;
 			mOffset = positionOffset;
-
+			//Log.e("mOffset==========", mOffset+"");
 			invalidate();
 
 			if (delegatePageListener != null) {
@@ -164,43 +165,47 @@ public class TabBarView extends LinearLayout {
 	public void notifyDataSetChanged() {
 
 		this.removeAllViews();
-		
+
 		tabCount = pager.getAdapter().getCount();
 
 		for (int i = 0; i < tabCount; i++) {
 
 			if(getResources().getConfiguration().orientation==1){
-				
-			addTabViewP(i, pager.getAdapter().getPageTitle(i).toString(),
-					((IconTabProvider) pager.getAdapter()).getPageIconResId(i));
-			
+				//横排
+				addTabViewP(i, pager.getAdapter().getPageTitle(i).toString(),
+						((IconTabProvider) pager.getAdapter()).getPageIconResId(i));
+
 			}else{
-				
+
 				addTabViewL(i, pager.getAdapter().getPageTitle(i).toString(),
 						((IconTabProvider) pager.getAdapter()).getPageIconResId(i));
-				
+
 			}
 		}
-		
+
 		getViewTreeObserver().addOnGlobalLayoutListener(new OnGlobalLayoutListener() {
 
 			@SuppressLint("NewApi")
 			@Override
 			public void onGlobalLayout() {
-				
+
 				getViewTreeObserver().removeOnGlobalLayoutListener(this);
 
 				mSelectedTab = pager.getCurrentItem();
-				
+
 			}
 		});
 
 	}
-
+	/**
+	 * 横排
+	 * @param i
+	 * @param string
+	 * @param pageIconResId
+	 */
 	private void addTabViewL(final int i, String string, int pageIconResId) {
-		// TODO Auto-generated method stub
 		TabView tab = new TabView(getContext());
-//		tab.setIcon(pageIconResId);
+		//tab.setIcon(pageIconResId);
 		tab.setText(string, pageIconResId);
 		tab.setOnClickListener(new OnClickListener() {
 			@Override
@@ -212,18 +217,23 @@ public class TabBarView extends LinearLayout {
 		this.addView(tab);
 	}
 
-
+	/**
+	 * 竖排
+	 * @param i
+	 * @param string
+	 * @param pageIconResId
+	 */
 	private void addTabViewP(final int i, final String string, int pageIconResId) {
-		// TODO Auto-generated method stub
 		final TabView tab = new TabView(getContext());
 		tab.setIcon(pageIconResId);
 		tab.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				
+
 				pager.setCurrentItem(i);
 			}
 		});
+		//长按显示文字
 		CheatSheet.setup(tab, string);
 
 		this.addView(tab);

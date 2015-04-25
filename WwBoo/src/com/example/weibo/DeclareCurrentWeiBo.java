@@ -97,7 +97,6 @@ public class DeclareCurrentWeiBo extends Activity{
 			}
 		@Override
 		public void onWeiboException(WeiboException arg0) {
-			Log.e("hahahh--------", arg0+"");
 		}
 	};
 	/**

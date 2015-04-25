@@ -150,7 +150,6 @@
                     android:layout_width="114dp"
                     android:layout_height="114dp"
                     android:scaleType="centerCrop"
-                    android:src="@drawable/re_beijing"
                     android:visibility="gone" />
 
                 <ImageView
@@ -159,7 +158,6 @@
                     android:layout_height="114dp"
                     android:layout_marginLeft="5dp"
                     android:scaleType="centerCrop"
-                    android:src="@drawable/re_beijing"
                     android:visibility="gone" />
 
                 <ImageView
@@ -168,7 +166,6 @@
                     android:layout_height="114dp"
                     android:layout_marginLeft="5dp"
                     android:scaleType="centerCrop"
-                    android:src="@drawable/re_beijing"
                     android:visibility="gone" />
             </LinearLayout>
 
@@ -183,7 +180,6 @@
                     android:layout_width="114dp"
                     android:layout_height="114dp"
                     android:scaleType="centerCrop"
-                    android:src="@drawable/re_beijing"
                     android:visibility="gone" />
 
                 <ImageView
@@ -192,7 +188,6 @@
                     android:layout_height="114dp"
                     android:layout_marginLeft="5dp"
                     android:scaleType="centerCrop"
-                    android:src="@drawable/re_beijing"
                     android:visibility="gone" />
 
                 <ImageView
@@ -201,7 +196,6 @@
                     android:layout_height="114dp"
                     android:layout_marginLeft="5dp"
                     android:scaleType="centerCrop"
-                    android:src="@drawable/re_beijing"
                     android:visibility="gone" />
             </LinearLayout>
 
@@ -216,7 +210,6 @@
                     android:layout_width="114dp"
                     android:layout_height="114dp"
                     android:scaleType="centerCrop"
-                    android:src="@drawable/re_beijing"
                     android:visibility="gone" />
 
                 <ImageView
@@ -225,7 +218,6 @@
                     android:layout_height="114dp"
                     android:layout_marginLeft="5dp"
                     android:scaleType="centerCrop"
-                    android:src="@drawable/re_beijing"
                     android:visibility="gone" />
 
                 <ImageView
@@ -234,7 +226,6 @@
                     android:layout_height="114dp"
                     android:layout_marginLeft="5dp"
                     android:scaleType="centerCrop"
-                    android:src="@drawable/re_beijing"
                     android:visibility="gone" />
             </LinearLayout>
         </LinearLayout>

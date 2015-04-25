@@ -20,6 +20,11 @@
         android:layout_gravity="center_horizontal"
         android:text="hahahahahahahah" />
 
+    <Button
+        android:id="@+id/login"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="登陆" />
 
     <ListView
         android:id="@+id/left_drawer"

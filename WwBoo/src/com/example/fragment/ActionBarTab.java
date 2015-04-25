@@ -76,7 +76,6 @@ public class ActionBarTab extends FragmentActivity implements ActionBar.TabListe
 	 * 请注意：请务必妥善保管好自己的 APP_SECRET，不要直接暴露在程序中，此处仅作为一个DEMO来演示。
 	 */
 	private static final String WEIBO_DEMO_APP_SECRET = "29727f75db2e8f4e31a9090f6ba25bb2";
-
 	/** 通过 code 获取 Token 的 URL */
 	private static final String OAUTH2_ACCESS_TOKEN_URL = "https://open.weibo.cn/oauth2/access_token";
 	/** 获取到的 Code */
@@ -88,7 +87,7 @@ public class ActionBarTab extends FragmentActivity implements ActionBar.TabListe
 	ActionBarDrawerToggle mActionBarDrawerToggle;
 	private DrawerLayout mDrawerLayout;
 	private ActionBar actionBar;
-	private ListView listview;
+	private ListView left_listview;
 	private ArrayList<GroupEntity> list;
 	//微博分组
 	private GroupAPI mGroupAPI;
@@ -96,12 +95,13 @@ public class ActionBarTab extends FragmentActivity implements ActionBar.TabListe
 	private MenuAdapter mMenuAdapter;
 	private TextView left_name;
 	private ImageView left_imageview;
+	private Button left_login;
 	private UsersAPI mUsersAPI;
 	private ImageLoader mImageLoader;
 	private WeiboAuth mWeiboAuth;
 
 	private TabBarView tabBarView;
-	
+
 	private fragment1 fragment1;
 	public ImageLoader getImageLoader(){
 		return mImageLoader;
@@ -119,7 +119,8 @@ public class ActionBarTab extends FragmentActivity implements ActionBar.TabListe
 		mImageLoader = new ImageLoader(this);
 		// 获取当前已保存过的 Token
 		mAccessToken = AccessTokenKeeper.readAccessToken(this);
-		Log.e("mAccessToken______", mAccessToken+"");
+		// 初始化微博对象
+		mWeiboAuth = new WeiboAuth(this, Constants.APP_KEY, Constants.REDIRECT_URL, Constants.SCOPE);
 		mUsersAPI = new UsersAPI(mAccessToken);
 		mGroupAPI = new GroupAPI(mAccessToken);
 
@@ -133,12 +134,20 @@ public class ActionBarTab extends FragmentActivity implements ActionBar.TabListe
 		tabBarView = (TabBarView) v.findViewById(R.id.tab_bar);
 
 
-		listview = (ListView)findViewById(R.id.left_drawer);
+		left_listview = (ListView)findViewById(R.id.left_drawer);
 		left_name = (TextView)findViewById(R.id.left_name);
 		left_imageview = (ImageView)findViewById(R.id.left_image);
+		left_login = (Button)findViewById(R.id.login);
+		left_login.setOnClickListener(new OnClickListener() {
 
-		// 初始化微博对象
-		mWeiboAuth = new WeiboAuth(this, Constants.APP_KEY, Constants.REDIRECT_URL, Constants.SCOPE);
+			@Override
+			public void onClick(View v) {
+				//startActivity(new Intent(ActionBarTab.this,WBAuthCodeActivity.class));
+				mWeiboAuth.authorize(new AuthListener(), WeiboAuth.OBTAIN_AUTH_CODE);
+				fetchTokenAsync(mCode, WEIBO_DEMO_APP_SECRET);
+				Log.e("mAccessToken______", mAccessToken+"");
+			}
+		});
 
 		//判断是否已经登录
 		if(mAccessToken != null && mAccessToken.isSessionValid()){
@@ -158,12 +167,14 @@ public class ActionBarTab extends FragmentActivity implements ActionBar.TabListe
 		}
 		getDate();
 		showlistview(list);
-		listview.setOnItemClickListener(new OnItemClickListener() {
+		/**
+		 * 左侧listview点击事件
+		 */
+		left_listview.setOnItemClickListener(new OnItemClickListener() {
 
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view,
 					int position, long id) {
-				// TODO Auto-generated method stub
 				mDrawerLayout.closeDrawers();
 			}
 		});
@@ -193,7 +204,6 @@ public class ActionBarTab extends FragmentActivity implements ActionBar.TabListe
 		};
 		mDrawerLayout.setDrawerListener(mActionBarDrawerToggle);
 
-
 		List<Fragment> fragments = new ArrayList<Fragment>();
 		fragments.add(fragment1);
 		fragments.add(new fragment2());
@@ -205,7 +215,7 @@ public class ActionBarTab extends FragmentActivity implements ActionBar.TabListe
 		tabBarView.setStripHeight(3);
 		mViewPager.setPageTransformer(true, new DepthPageTransformer());
 		mViewPager.setOffscreenPageLimit(3);
-		
+
 
 	}
 	/**
@@ -258,53 +268,24 @@ public class ActionBarTab extends FragmentActivity implements ActionBar.TabListe
 		}
 
 	};
+	/**
+	 * 左侧listview绑定到adapter
+	 * @param list
+	 */
 	private void showlistview(ArrayList<GroupEntity> list) {
 		if(mMenuAdapter ==null){
 			mMenuAdapter = new MenuAdapter(this, list);
-			listview.setAdapter(mMenuAdapter);
+			left_listview.setAdapter(mMenuAdapter);
 		}else{
 			mMenuAdapter.onDateChange(list);
 		}
 
-	}
-	/**
-	 * 反射修改tab到antionbar
-	 * @param actionBar
-	 */
-	private void enableEmbeddedTabs(Object actionBar){
-		try {
-			Method setHasEmbeddedTabsMethod = actionBar.getClass().getDeclaredMethod("setHasEmbeddedTabs", boolean.class);
-			setHasEmbeddedTabsMethod.setAccessible(true);
-			setHasEmbeddedTabsMethod.invoke(actionBar, true);
-
-		} catch (Exception e) {
-			// TODO: handle exception
-		}
 	}
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		if (mActionBarDrawerToggle.onOptionsItemSelected(item)) {  
 			return true;  
 		}  
-		// TODO Auto-generated method stub
-		/*	boolean open = false;
-		switch (item.getItemId()) {
-		case android.R.id.home:
-			if(!open){
-				mDrawerLayout.openDrawer(Gravity.LEFT);
-				open = true;
-			}else{
-				mDrawerLayout.closeDrawers();
-				open = false;
-			}
-
-			break;
-
-		}*/
-
-		/*if(mActionBarDrawerToggle.onOptionsItemSelected(item)){
-			return true;
-		}*/
 		return super.onOptionsItemSelected(item);
 	}
 	@Override
@@ -357,36 +338,24 @@ public class ActionBarTab extends FragmentActivity implements ActionBar.TabListe
 	 * 微博认证授权回调类。
 	 */
 	class AuthListener implements WeiboAuthListener {
-
 		@Override
 		public void onComplete(Bundle values) {
 			if (null == values) {
-				Toast.makeText(ActionBarTab.this, 
-						R.string.weibosdk_demo_toast_obtain_code_failed, Toast.LENGTH_SHORT).show();
 				return;
 			}
-
 			String code = values.getString("code");
 			if (TextUtils.isEmpty(code)) {
-				Toast.makeText(ActionBarTab.this, 
-						R.string.weibosdk_demo_toast_obtain_code_failed, Toast.LENGTH_SHORT).show();
 				return;
 			}
 			mCode = code;
-			Toast.makeText(ActionBarTab.this, 
-					R.string.weibosdk_demo_toast_obtain_code_success, Toast.LENGTH_SHORT).show();
+			Log.e("mcode", mCode+"");
 		}
-
 		@Override
 		public void onCancel() {
-			Toast.makeText(ActionBarTab.this, 
-					R.string.weibosdk_demo_toast_auth_canceled, Toast.LENGTH_LONG).show();
 		}
 
 		@Override
 		public void onWeiboException(WeiboException e) {
-			UIUtils.showToast(ActionBarTab.this, 
-					"Auth exception : " + e.getMessage(), Toast.LENGTH_LONG);
 		}
 	}
 
@@ -411,40 +380,34 @@ public class ActionBarTab extends FragmentActivity implements ActionBar.TabListe
 			@Override
 			public void onComplete(String response) {
 				LogUtil.d(TAG, "Response: " + response);
-
 				// 获取 Token 成功
 				Oauth2AccessToken token = Oauth2AccessToken.parseAccessToken(response);
 				if (token != null && token.isSessionValid()) {
-					LogUtil.d(TAG, "Success! " + token.toString());
-
+					Log.e("Success!------", token.toString());
 					mAccessToken = token;
-					String date = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss").format(
-							new java.util.Date(mAccessToken.getExpiresTime()));
-					String format = getString(R.string.weibosdk_demo_token_to_string_format_1);
+					AccessTokenKeeper.clear(ActionBarTab.this);
 					AccessTokenKeeper.writeAccessToken(ActionBarTab.this, mAccessToken);
-
 				} else {
-					LogUtil.d(TAG, "Failed to receive access token");
+					Log.e("Failed!------", token.toString());
 				}
 			}
-
 			@Override
 			public void onWeiboException(WeiboException e) {
-				LogUtil.e(TAG, "onWeiboException： " + e.getMessage());
-				Toast.makeText(ActionBarTab.this, 
-						R.string.weibosdk_demo_toast_obtain_token_failed, Toast.LENGTH_SHORT).show();
 			}
 		});
 	}
-	
+	/**
+	 * 显示ActionBar
+	 */
 	@Override
 	public void Show() {
-		// TODO Auto-generated method stub
 		actionBar.show();
 	}
+	/**
+	 * 隐藏ActionBar
+	 */
 	@Override
 	public void Hold() {
-		// TODO Auto-generated method stub
 		actionBar.hide();
 	}
 

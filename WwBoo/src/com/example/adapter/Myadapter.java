@@ -45,7 +45,6 @@ public class Myadapter extends BaseAdapter implements OnClickListener{
 
 	private Context mContext;
 
-	private View weibo_item;
 
 	public Myadapter(Context context,ArrayList<Entity> list){
 		this.mContext=context;
@@ -475,6 +474,7 @@ public class Myadapter extends BaseAdapter implements OnClickListener{
 					ImageView image = (ImageView) convertView.findViewWithTag(pic2.get(i));
 					if(image.getTag() ==pic2.get(i)){
 						holder.image1.setVisibility(View.VISIBLE);
+						holder.image1.setBackgroundResource(R.drawable.re_beijing);
 						mImageLoader.DisplayImage(new_pic_url, image, false);	
 					}else{
 						image.setVisibility(View.GONE);
@@ -484,6 +484,7 @@ public class Myadapter extends BaseAdapter implements OnClickListener{
 				case 1:
 					if(holder.image2.getTag() ==pic2.get(i)){
 						holder.image2.setVisibility(View.VISIBLE);
+						holder.image2.setBackgroundResource(R.drawable.re_beijing);
 						mImageLoader.DisplayImage(new_pic_url, holder.image2, false);	
 					}else{
 						holder.image2.setVisibility(View.GONE);
@@ -492,6 +493,7 @@ public class Myadapter extends BaseAdapter implements OnClickListener{
 				case 2:
 					if(holder.image3.getTag() ==pic2.get(i)){
 						holder.image3.setVisibility(View.VISIBLE);
+						holder.image3.setBackgroundResource(R.drawable.re_beijing);
 						mImageLoader.DisplayImage(new_pic_url, holder.image3, false);	
 					}else{
 						holder.image3.setVisibility(View.GONE);
@@ -500,6 +502,7 @@ public class Myadapter extends BaseAdapter implements OnClickListener{
 				case 3:
 					if(holder.image4.getTag() ==pic2.get(i)){
 						holder.image4.setVisibility(View.VISIBLE);
+						holder.image4.setBackgroundResource(R.drawable.re_beijing);
 						mImageLoader.DisplayImage(new_pic_url, holder.image4, false);	
 					}else{
 						holder.image4.setVisibility(View.GONE);
@@ -508,6 +511,7 @@ public class Myadapter extends BaseAdapter implements OnClickListener{
 				case 4:
 					if(holder.image5.getTag() ==pic2.get(i)){
 						holder.image5.setVisibility(View.VISIBLE);
+						holder.image5.setBackgroundResource(R.drawable.re_beijing);
 						mImageLoader.DisplayImage(new_pic_url, holder.image5, false);	
 					}else{
 						holder.image5.setVisibility(View.GONE);
@@ -516,6 +520,7 @@ public class Myadapter extends BaseAdapter implements OnClickListener{
 				case 5:
 					if(holder.image6.getTag() ==pic2.get(i)){
 						holder.image6.setVisibility(View.VISIBLE);
+						holder.image6.setBackgroundResource(R.drawable.re_beijing);
 						mImageLoader.DisplayImage(new_pic_url, holder.image6, false);	
 					}else{
 						holder.image6.setVisibility(View.GONE);
@@ -524,6 +529,7 @@ public class Myadapter extends BaseAdapter implements OnClickListener{
 				case 6:
 					if(holder.image7.getTag() ==pic2.get(i)){
 						holder.image7.setVisibility(View.VISIBLE);
+						holder.image7.setBackgroundResource(R.drawable.re_beijing);
 						mImageLoader.DisplayImage(new_pic_url, holder.image7, false);	
 					}else{
 						holder.image7.setVisibility(View.GONE);
@@ -532,18 +538,19 @@ public class Myadapter extends BaseAdapter implements OnClickListener{
 				case 7:
 					if(holder.image8.getTag() ==pic2.get(i)){
 						holder.image8.setVisibility(View.VISIBLE);
+						holder.image8.setBackgroundResource(R.drawable.re_beijing);
 						mImageLoader.DisplayImage(new_pic_url, holder.image8, false);	
 					}else{
 						holder.image8.setVisibility(View.GONE);
 					}
 					break;
 				case 8:
-					ImageView image9 = (ImageView) convertView.findViewWithTag(pic2.get(i));
 					if(holder.image9.getTag() ==pic2.get(i)){
-						image9.setVisibility(View.VISIBLE);
-						mImageLoader.DisplayImage(new_pic_url, image9, false);	
+						holder.image9.setVisibility(View.VISIBLE);
+						holder.image9.setBackgroundResource(R.drawable.re_beijing);
+						mImageLoader.DisplayImage(new_pic_url, holder.image9, false);	
 					}else{
-						image9.setVisibility(View.GONE);
+						holder.image9.setVisibility(View.GONE);
 					}
 					break;
 

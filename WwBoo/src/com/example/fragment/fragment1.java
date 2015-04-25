@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -26,6 +27,7 @@ import android.widget.Toast;
 import com.example.Util.Entity;
 import com.example.Util.Entity2;
 import com.example.Util.GetDataHelper;
+import com.example.Util.LogUtil;
 import com.example.Util.NetUtil;
 import com.example.adapter.Myadapter;
 import com.example.autoloadlistview.AutoLoadListView;
@@ -43,6 +45,8 @@ import com.sina.weibo.sdk.auth.Oauth2AccessToken;
 import com.sina.weibo.sdk.exception.WeiboException;
 import com.sina.weibo.sdk.net.RequestListener;
 import com.sina.weibo.sdk.openapi.StatusesAPI;
+import com.sina.weibo.sdk.openapi.legacy.FavoritesAPI;
+import com.sina.weibo.sdk.openapi.models.Favorite;
 import com.sina.weibo.sdk.openapi.models.StatusList;
 public class fragment1 extends Fragment implements ILoadListener 
 {
@@ -57,7 +61,8 @@ public class fragment1 extends Fragment implements ILoadListener
 	private Oauth2AccessToken mAccessToken;
 	/** 用于获取微博信息流等操作的API */
 	private StatusesAPI mStatusesAPI;
-	
+	/** 收藏	 */
+	private FavoritesAPI mFavoritesAPI;
 	private Entity  entity;
 	private Entity2 entity2;
 	private int page =1;
@@ -72,6 +77,7 @@ public class fragment1 extends Fragment implements ILoadListener
 	GetDataHelper mDataHelper;
 	private ShowActionBar showActionBar;
 	private boolean actionbar_is_show =true;
+	private boolean mIsFavorite;
 	private Handler handler = new Handler() {
 		public void handleMessage(android.os.Message msg) {
 			if(msg.what==MSG_REFRESH){
@@ -81,7 +87,7 @@ public class fragment1 extends Fragment implements ILoadListener
 				} catch (Exception e) {
 				}
 				if(NetUtil.checkNet(getActivity())){
-					mStatusesAPI.friendsTimeline(Long_since_id, 0L, 20, 1, false, 0, false, new_mListener);
+					mStatusesAPI.friendsTimeline(Long_since_id, 0L, 20, 1, false, 0, false, mListener);
 					adapter.onDateChange(list);
 				}else{
 					Toast.makeText(getActivity(), "无网络链接", Toast.LENGTH_SHORT).show();
@@ -151,7 +157,7 @@ public class fragment1 extends Fragment implements ILoadListener
 		mAccessToken = AccessTokenKeeper.readAccessToken(getActivity());
 		// 对statusAPI实例化
 		mStatusesAPI = new StatusesAPI(mAccessToken);
-		
+		mFavoritesAPI = new FavoritesAPI(mAccessToken);
 		mDataHelper = new GetDataHelper(getActivity());
 
 		list = mDataHelper.restoreNlist();
@@ -236,7 +242,6 @@ public class fragment1 extends Fragment implements ILoadListener
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view, int position,
 					long id) {
-				// TODO Auto-generated method stub
 				Intent intent = new Intent(getActivity(),CommentActivity.class);
 				Bundle bundle = new Bundle();
 				bundle.putSerializable("weibo", list.get(position));
@@ -248,11 +253,19 @@ public class fragment1 extends Fragment implements ILoadListener
 		 * item长按显示dialog
 		 */
 		listview.setOnItemLongClickListener(new OnItemLongClickListener() {
-
+			String favorite = "收藏";
 			@Override
 			public boolean onItemLongClick(AdapterView<?> parent, View view,
 					final int position, long id) {
-				new AlertDialog.Builder(getActivity()).setItems(new String[]{"评论","转发","收藏","复制"},
+				final Entity entity = list.get(position);
+				Log.e("getisFavorited", entity.getisFavorited()+"");
+				mIsFavorite = entity.getisFavorited();
+				if(!mIsFavorite){
+					favorite = "收藏";
+				}else{
+					favorite = "取消收藏";
+				}
+				new AlertDialog.Builder(getActivity()).setItems(new String[]{"评论","转发",favorite,"复制"},
 						new DialogInterface.OnClickListener() {
 
 					@Override
@@ -277,26 +290,39 @@ public class fragment1 extends Fragment implements ILoadListener
 							break;
 						case 2:
 							//收藏
-							
-							Toast.makeText(getActivity(), "收藏成功！", Toast.LENGTH_SHORT).show();
+							change_favorite();
 							break;
 						case 3:
 							//复制
-							
 							Toast.makeText(getActivity(), "复制成功！", Toast.LENGTH_SHORT).show();
 							break;
-						
+						}
+					}
+					/**
+					 * 收藏的方法
+					 */
+					private void change_favorite() {
+						if(!mIsFavorite){
+							mFavoritesAPI.create(Long.parseLong(entity.getId()), mListener);
+							Toast.makeText(getActivity(), "收藏成功！", Toast.LENGTH_SHORT).show();
+							entity.setFavorited(true);
+						}else{
+							mFavoritesAPI.destroy(Long.parseLong(entity.getId()), mListener);
+							Toast.makeText(getActivity(), "取消收藏成功！", Toast.LENGTH_SHORT).show();
+							entity.setFavorited(false);
 						}
 
-
 					}
+
 				}).create().show();;
 				return true;
 
 			}
 		});
+		/**
+		 * listview的滑动事件
+		 */
 		listview.setOnTouchListener(new OnTouchListener() {
-
 			@Override
 			public boolean onTouch(View v, MotionEvent event) {
 				switch (event.getAction()) {
@@ -343,7 +369,7 @@ public class fragment1 extends Fragment implements ILoadListener
 		});
 
 	}
-	//显示List
+	//显示List并绑定adapter
 	private void showListView(ArrayList<Entity> list){
 		if(adapter ==null){
 			adapter = new Myadapter(getActivity(), list);
@@ -360,7 +386,6 @@ public class fragment1 extends Fragment implements ILoadListener
 		list.clear();
 		mStatusesAPI.friendsTimeline(0L, 0L, 20, 1, false, 0, false, mListener);
 	}
-
 	/*
 	 * 加载更多
 	 * @see com.example.weibo.weibolist.ILoadListener#onLoad()
@@ -369,14 +394,12 @@ public class fragment1 extends Fragment implements ILoadListener
 	public void onLoad() {
 		mStatusesAPI.friendsTimeline(0L, 0L, 20, ++page, false, 0, false, mListener);
 		showListView(list);
-
 	}
 
 	/*
 	 * 解析新浪微博
 	 */
 	public RequestListener mListener = new RequestListener() {
-
 		@Override
 		public void onWeiboException(WeiboException arg0) {
 		}
@@ -385,16 +408,21 @@ public class fragment1 extends Fragment implements ILoadListener
 			if (!TextUtils.isEmpty(response)) {
 				if (response.startsWith("{\"statuses\"")) {
 					// 调用 StatusList#parse 解析字符串成微博列表对象
+					Favorite.parse(response);
 					StatusList statuses = StatusList.parse(response);
-					if (statuses != null && statuses.total_number > 0) {
-						Toast.makeText(getActivity(), "加载20条微博", 1500).show();
+					if (statuses != null && statuses.total_number > 0&& statuses.statusList!=null) {
 						since_id=statuses.statusList.get(0).id;
-						for(int i=0;i<20;i++){
+						for(int i=0;i<statuses.statusList.size();i++){
 							addToList(i, statuses);
-							list.add(entity);
+							if(!list.contains(entity)){
+								list.add(entity);
+							}
 						}
+						Toast.makeText(getActivity(), "刷新"+statuses.statusList.size()+"条微博", Toast.LENGTH_SHORT).show();
 						adapter.onDateChange(list);
 						mDataHelper.saveNlist(list);
+					}else{
+						Toast.makeText(getActivity(), "没有新微薄", Toast.LENGTH_SHORT).show();
 					}
 
 				}
@@ -419,6 +447,7 @@ public class fragment1 extends Fragment implements ILoadListener
 		entity.setAttitudes_count(statuses.statusList.get(i).attitudes_count);
 		entity.setTime(statuses.statusList.get(i).created_at);
 		entity.setFrom_type(statuses.statusList.get(i).source);
+		entity.setFavorited(statuses.statusList.get(i).favorited);
 		if(!(statuses.statusList.get(i).retweeted_status ==null)){
 			entity2 = new Entity2();
 			entity2.setName(statuses.statusList.get(i).retweeted_status.user.screen_name);
@@ -427,41 +456,6 @@ public class fragment1 extends Fragment implements ILoadListener
 			entity.setEntity2(entity2);
 		}
 	}
-	/**
-	 * 刷新微博的监听器
-	 */
-	public RequestListener new_mListener = new RequestListener() {
-
-		@Override
-		public void onWeiboException(WeiboException arg0) {
-		}
-		@Override
-		public void onComplete(String response) {
-			if (!TextUtils.isEmpty(response)) {
-				if (response.startsWith("{\"statuses\"")) {
-					// 调用 StatusList#parse 解析字符串成微博列表对象
-					StatusList statuses = StatusList.parse(response);
-					if (statuses != null && statuses.statusList!=null) {
-						since_id=statuses.statusList.get(0).id;
-						for(int i=0;i< statuses.statusList.size();i++){
-							addToList(i, statuses);
-							if(!list.contains(entity)){
-								list.add(i, entity);
-							}
-						}
-						mDataHelper.saveNlist(list);
-						Toast.makeText(getActivity(), "刷新"+statuses.statusList.size()+"条微博", Toast.LENGTH_SHORT).show();
-						adapter.onDateChange(list);
-						pullToRefreshView.setRefreshing(false);
-					}
-					
-					else{
-						Toast.makeText(getActivity(), "没有新微薄", Toast.LENGTH_SHORT).show();
-					}
-				}
-			}
-		}
-	};
 	@Override
 	public void onDestroy() {
 		ImageLoader imageLoader = adapter.getImageLoader();
@@ -471,6 +465,11 @@ public class fragment1 extends Fragment implements ILoadListener
 		super.onDestroy();
 		mDataHelper.saveNlist(list);
 	}
+	/**
+	 * 控制ActionBar显隐的接口
+	 * @author Mr_Wrong
+	 *
+	 */
 	public interface ShowActionBar{
 		public void Show();
 		public void Hold();

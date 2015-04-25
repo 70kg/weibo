@@ -14,6 +14,13 @@ public class Entity implements Serializable {
 	ArrayList<String> original_pic;
 	String yuanshi_pic;
 	String from_type;
+	boolean favorited;
+	public boolean getisFavorited() {
+		return favorited;
+	}
+	public void setFavorited(boolean favorited) {
+		this.favorited = favorited;
+	}
 	public String getFrom_type() {
 		return from_type;
 	}

@@ -193,6 +193,7 @@ public class WBAuthCodeActivity extends Activity {
                             new java.util.Date(mAccessToken.getExpiresTime()));
                     String format = getString(R.string.weibosdk_demo_token_to_string_format_1);
                     mTokenText.setText(String.format(format, mAccessToken.getToken(), date));
+                    AccessTokenKeeper.clear(WBAuthCodeActivity.this);
                     AccessTokenKeeper.writeAccessToken(WBAuthCodeActivity.this, mAccessToken);
                     mAuthCodeButton.setEnabled(false);
                     

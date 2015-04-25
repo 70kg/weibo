@@ -33,6 +33,7 @@ import com.example.bigpic.ZoomImageView.click;
 import com.example.weibo.R;
 
 public class BigPicActivity  extends Activity implements click{
+	//没使用这个
 	private ViewPager view_pager;
 
 	private MyAdapter adapter ;
