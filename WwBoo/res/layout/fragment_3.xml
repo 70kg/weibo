@@ -4,12 +4,11 @@
     android:layout_height="match_parent"
     android:orientation="vertical" >
 
- 
-    <com.example.weibo.weibolist
+    <com.example.autoloadlistview.AutoLoadListView
         android:id="@+id/commentlistview"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="20dp" >
-    </com.example.weibo.weibolist>
+        android:background="#f1f2ef" >
+    </com.example.autoloadlistview.AutoLoadListView>
 
 </LinearLayout>

@@ -83,7 +83,6 @@ public class DeclareCurrentWeiBo extends Activity{
 	private RequestListener mListener = new RequestListener(){
 		@Override
 		public void onComplete(String response) {
-			Log.e("hahahh--------", TextUtils.isEmpty(response)+"");
 			if (!TextUtils.isEmpty(response)) {
 				try {
 						Comment status = Comment.parse(new JSONObject(response));

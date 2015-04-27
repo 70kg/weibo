@@ -28,6 +28,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.Util.Entity;
+import com.example.Util.StringUtil;
 import com.example.bigpic.BigPicActivity;
 import com.example.bigpic.BigPicActivity1;
 import com.example.loadimage.ImageLoader;
@@ -133,12 +134,11 @@ public class Myadapter extends BaseAdapter implements OnClickListener{
 	 * @param holder
 	 */
 	private void ToControltheAssignment(final Entity entity, ViewHolder holder,View convertView) {
-
 		View view = convertView.findViewById(R.id.weibo2_view);
 		if(!(entity.getEntity2() ==null)){
 			if((String)holder.weibo2_content.getTag() ==entity.getEntity2().getContent()){
 				holder.weibo2_content.setText("@"+entity.getEntity2().getName()+" :"+entity.getEntity2().getContent());
-				extractMention2Link(holder.weibo2_content);
+				StringUtil.extractMention2Link(holder.weibo2_content);
 				holder.weibo2_content.setAutoLinkMask(0x01);
 				holder.weibo2_content.setVisibility(View.VISIBLE);
 			}else{
@@ -172,29 +172,14 @@ public class Myadapter extends BaseAdapter implements OnClickListener{
 			}
 
 		}
-		/**
-		 * 微博item设置点击事件
-		 */
-	/*	weibo_item = convertView.findViewById(R.id.weibo_item);
-		weibo_item.setOnClickListener(new View.OnClickListener() {
 
-			@Override
-			public void onClick(View v) {
-				Intent intent = new Intent(mContext,CommentActivity.class);
-				Bundle bundle = new Bundle();
-				bundle.putSerializable("weibo", entity);
-				intent.putExtras(bundle);
-				mContext.startActivity(intent);
-
-			}
-		});*/
 
 		String url="";
 		url = entity.getUser_pic();
 		mImageLoader.DisplayImage(url, holder.image, false);
 
 		holder.content.setText(entity.getContent());
-		extractMention2Link(holder.content);
+		StringUtil.extractMention2Link(holder.content);
 		holder.content.setAutoLinkMask(0x01);
 		holder.name.setText(entity.getName());
 		holder.name.getPaint().setFakeBoldText(true);//加粗
@@ -278,98 +263,78 @@ public class Myadapter extends BaseAdapter implements OnClickListener{
 			}
 
 		}else{
-			holder.image2.setVisibility(View.GONE);
+			holder.image2.setTag(null);
 		}
 		//--------------------------------
 		if(entity.getWeibo_pic()!=null&&entity.getWeibo_pic().size()>=3){
 			holder.image3.setTag(String.valueOf(entity.getWeibo_pic().get(2)));
-			holder.image3.setVisibility(View.VISIBLE);
 		}else if(entity.getEntity2() !=null){
 			if(entity.getEntity2().getWeibo_pic()!=null&&entity.getEntity2().getWeibo_pic().size()>=3){
 				holder.image3.setTag(String.valueOf(entity.getEntity2().getWeibo_pic().get(2)));
-				holder.image3.setVisibility(View.VISIBLE);
 			}
 
 		}else{
-			holder.image3.setVisibility(View.GONE);
+			holder.image3.setTag(null);
 		}
 		//--------------------------------
 		if(entity.getWeibo_pic()!=null&&entity.getWeibo_pic().size()>=4){
 			holder.image4.setTag(String.valueOf(entity.getWeibo_pic().get(3)));
-			holder.image4.setVisibility(View.VISIBLE);
 		}else if(entity.getEntity2() !=null){
 			if(entity.getEntity2().getWeibo_pic()!=null&&entity.getEntity2().getWeibo_pic().size()>=4){
 				holder.image4.setTag(String.valueOf(entity.getEntity2().getWeibo_pic().get(3)));
-				holder.image4.setVisibility(View.VISIBLE);
 			}
-
 		}else{
-			holder.image4.setVisibility(View.GONE);
+			holder.image4.setTag(null);
 		}
 		//--------------------------------
 		if(entity.getWeibo_pic()!=null&&entity.getWeibo_pic().size()>=5){
 			holder.image5.setTag(String.valueOf(entity.getWeibo_pic().get(4)));
-			holder.image5.setVisibility(View.VISIBLE);
 		}else if(entity.getEntity2() !=null){
 			if(entity.getEntity2().getWeibo_pic()!=null&&entity.getEntity2().getWeibo_pic().size()>=5){
 				holder.image5.setTag(String.valueOf(entity.getEntity2().getWeibo_pic().get(4)));
-				holder.image5.setVisibility(View.VISIBLE);
 			}
-
 		}else{
-			holder.image5.setVisibility(View.GONE);
+			holder.image5.setTag(null);
 		}
 		//--------------------------------
 		if(entity.getWeibo_pic()!=null&&entity.getWeibo_pic().size()>=6){
 			holder.image6.setTag(String.valueOf(entity.getWeibo_pic().get(5)));
-			holder.image6.setVisibility(View.VISIBLE);
 		}else if(entity.getEntity2() !=null){
 			if(entity.getEntity2().getWeibo_pic()!=null&&entity.getEntity2().getWeibo_pic().size()>=6){
 				holder.image6.setTag(String.valueOf(entity.getEntity2().getWeibo_pic().get(5)));
-				holder.image6.setVisibility(View.VISIBLE);
 			}
-
 		}else{
-			holder.image6.setVisibility(View.GONE);
+			holder.image6.setTag(null);
 		}
 		//--------------------------------
 		if(entity.getWeibo_pic()!=null&&entity.getWeibo_pic().size()>=7){
 			holder.image7.setTag(String.valueOf(entity.getWeibo_pic().get(6)));
-			holder.image7.setVisibility(View.VISIBLE);
 		}else if(entity.getEntity2() !=null){
 			if(entity.getEntity2().getWeibo_pic()!=null&&entity.getEntity2().getWeibo_pic().size()>=7){
 				holder.image7.setTag(String.valueOf(entity.getEntity2().getWeibo_pic().get(6)));
-				holder.image7.setVisibility(View.VISIBLE);
 			}
-
 		}else{
-			holder.image7.setVisibility(View.GONE);
+			holder.image7.setTag(null);
 		}
 		//--------------------------------
 		if(entity.getWeibo_pic()!=null&&entity.getWeibo_pic().size()>=8){
 			holder.image8.setTag(String.valueOf(entity.getWeibo_pic().get(7)));
-			holder.image8.setVisibility(View.VISIBLE);
 		}else if(entity.getEntity2() !=null){
 			if(entity.getEntity2().getWeibo_pic()!=null&&entity.getEntity2().getWeibo_pic().size()>=8){
 				holder.image8.setTag(String.valueOf(entity.getEntity2().getWeibo_pic().get(7)));
-				holder.image8.setVisibility(View.VISIBLE);
 			}
-
 		}else{
-			holder.image8.setVisibility(View.GONE);
+			holder.image8.setTag(null);
 		}
 		//--------------------------------
 		if(entity.getWeibo_pic()!=null&&entity.getWeibo_pic().size()>=9){
 			holder.image9.setTag(String.valueOf(entity.getWeibo_pic().get(8)));
-			holder.image9.setVisibility(View.VISIBLE);
 		}else if(entity.getEntity2() !=null){
 			if(entity.getEntity2().getWeibo_pic()!=null&&entity.getEntity2().getWeibo_pic().size()>=9){
 				holder.image9.setTag(String.valueOf(entity.getEntity2().getWeibo_pic().get(8)));
-				holder.image9.setVisibility(View.VISIBLE);
 			}
-
 		}else{
-			holder.image9.setVisibility(View.GONE);
+			holder.image9.setTag(null);
 		}
 	}
 	/**
@@ -475,6 +440,7 @@ public class Myadapter extends BaseAdapter implements OnClickListener{
 					if(image.getTag() ==pic2.get(i)){
 						holder.image1.setVisibility(View.VISIBLE);
 						holder.image1.setBackgroundResource(R.drawable.re_beijing);
+						
 						mImageLoader.DisplayImage(new_pic_url, image, false);	
 					}else{
 						image.setVisibility(View.GONE);
@@ -612,38 +578,6 @@ public class Myadapter extends BaseAdapter implements OnClickListener{
 		return lage_url;
 
 	}
-	/**
-	 * 微博字符串处理
-	 * @param v
-	 */
-	public static void extractMention2Link(TextView v) {
-		v.setAutoLinkMask(0);
-		Pattern mentionsPattern = Pattern.compile("@(\\w+?\\-*?)(?=\\W|$)(.)");
-		String mentionsScheme = String.format("%s/?%s=", Defs.MENTIONS_SCHEMA, Defs.PARAM_UID);
-		Linkify.addLinks(v, mentionsPattern, mentionsScheme, new MatchFilter() {
-
-			@Override
-			public boolean acceptMatch(CharSequence s, int start, int end) {
-				return s.charAt(end-1) !='.';
-			}
-
-		}, new TransformFilter() {
-			@Override
-			public String transformUrl(Matcher match, String url) {
-				return match.group(1); 
-			}
-		});
-
-		Pattern trendsPattern = Pattern.compile("#(\\w+?)#");
-		String trendsScheme = String.format("%s/?%s=", Defs.TRENDS_SCHEMA, Defs.PARAM_UID);
-		Linkify.addLinks(v, trendsPattern, trendsScheme, null, new TransformFilter() {
-			@Override
-			public String transformUrl(Matcher match, String url) {
-				//Log.d(TAG, match.group(1));
-				return match.group(1); 
-			}
-		});
-
-	}
+	
 
 }

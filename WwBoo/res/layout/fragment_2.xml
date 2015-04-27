@@ -4,11 +4,11 @@
     android:layout_height="match_parent"
     android:orientation="vertical" >
 
-    <com.example.weibo.weibolist
+    <com.example.autoloadlistview.AutoLoadListView
         android:id="@+id/mention_me_listview"
+        android:background="#f1f2ef"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        >
-    </com.example.weibo.weibolist>
+        android:layout_height="match_parent" >
+    </com.example.autoloadlistview.AutoLoadListView>
 
 </LinearLayout>

@@ -142,10 +142,10 @@ public class ActionBarTab extends FragmentActivity implements ActionBar.TabListe
 
 			@Override
 			public void onClick(View v) {
-				//startActivity(new Intent(ActionBarTab.this,WBAuthCodeActivity.class));
-				mWeiboAuth.authorize(new AuthListener(), WeiboAuth.OBTAIN_AUTH_CODE);
+				startActivity(new Intent(ActionBarTab.this,WBAuthCodeActivity.class));
+				/*mWeiboAuth.authorize(new AuthListener(), WeiboAuth.OBTAIN_AUTH_CODE);
 				fetchTokenAsync(mCode, WEIBO_DEMO_APP_SECRET);
-				Log.e("mAccessToken______", mAccessToken+"");
+				Log.e("mAccessToken______", mAccessToken+"");*/
 			}
 		});
 

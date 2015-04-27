@@ -48,7 +48,7 @@ import com.sina.weibo.sdk.openapi.StatusesAPI;
 import com.sina.weibo.sdk.openapi.legacy.FavoritesAPI;
 import com.sina.weibo.sdk.openapi.models.Favorite;
 import com.sina.weibo.sdk.openapi.models.StatusList;
-public class fragment1 extends Fragment implements ILoadListener 
+public class fragment1 extends Fragment 
 {
 	// 加载更多
 	public static final int MSG_LOAD_MORE = 0;
@@ -74,21 +74,23 @@ public class fragment1 extends Fragment implements ILoadListener
 	private ImageView refresh_button;
 	private ImageView add_button;
 	private ArrayList<Entity> mList = new ArrayList<Entity>();
-	GetDataHelper mDataHelper;
+	private GetDataHelper mDataHelper;
 	private ShowActionBar showActionBar;
 	private boolean actionbar_is_show =true;
 	private boolean mIsFavorite;
+	private boolean mIsrefresh;
 	private Handler handler = new Handler() {
 		public void handleMessage(android.os.Message msg) {
 			if(msg.what==MSG_REFRESH){
-				pullToRefreshView.setRefreshing(false);
+				mIsrefresh= true;
+				pullToRefreshView.setRefreshing(true);
 				try {
 					Long_since_id = Long.parseLong(since_id);
 				} catch (Exception e) {
 				}
 				if(NetUtil.checkNet(getActivity())){
 					mStatusesAPI.friendsTimeline(Long_since_id, 0L, 20, 1, false, 0, false, mListener);
-					adapter.onDateChange(list);
+					pullToRefreshView.setRefreshing(false);
 				}else{
 					Toast.makeText(getActivity(), "无网络链接", Toast.LENGTH_SHORT).show();
 				}
@@ -146,13 +148,10 @@ public class fragment1 extends Fragment implements ILoadListener
 		ObjectAnimator.ofFloat(v, "translationX", 200.0F, 0.0F)  
 		.setDuration(800)  
 		.start();
-
 	}
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState) {
-		// TODO Auto-generated method stub
 		super.onActivityCreated(savedInstanceState);
-
 		// 获取当前已保存过的 Token
 		mAccessToken = AccessTokenKeeper.readAccessToken(getActivity());
 		// 对statusAPI实例化
@@ -160,12 +159,13 @@ public class fragment1 extends Fragment implements ILoadListener
 		mFavoritesAPI = new FavoritesAPI(mAccessToken);
 		mDataHelper = new GetDataHelper(getActivity());
 
-		list = mDataHelper.restoreNlist();
 		//初始化控件
 		refresh_button = (ImageView)rootView.findViewById(R.id.refresh_button);
 		listview = (AutoLoadListView)rootView.findViewById(R.id.listview);
 		fuction_layout = rootView.findViewById(R.id.fuciton_layout);
 		add_button = (ImageView)rootView.findViewById(R.id.add_button);
+
+		list = mDataHelper.restoreNlist();
 		if(!NetUtil.checkNet(getActivity())){
 			Toast.makeText(getActivity(), "无网络连接", Toast.LENGTH_SHORT).show();
 		}else{
@@ -359,12 +359,15 @@ public class fragment1 extends Fragment implements ILoadListener
 				return false;
 			}
 		});
-
+		/**
+		 * 加载更多
+		 */
 		listview.setOnLoadNextListener(new OnLoadNextListener() {
 
 			@Override
 			public void onLoadNext() {
-				onLoad();
+				mIsrefresh = false;
+				mStatusesAPI.friendsTimeline(0L, 0L, 20, ++page, false, 0, false, mListener);
 			}
 		});
 
@@ -387,16 +390,6 @@ public class fragment1 extends Fragment implements ILoadListener
 		mStatusesAPI.friendsTimeline(0L, 0L, 20, 1, false, 0, false, mListener);
 	}
 	/*
-	 * 加载更多
-	 * @see com.example.weibo.weibolist.ILoadListener#onLoad()
-	 */
-	@Override
-	public void onLoad() {
-		mStatusesAPI.friendsTimeline(0L, 0L, 20, ++page, false, 0, false, mListener);
-		showListView(list);
-	}
-
-	/*
 	 * 解析新浪微博
 	 */
 	public RequestListener mListener = new RequestListener() {
@@ -407,19 +400,20 @@ public class fragment1 extends Fragment implements ILoadListener
 		public void onComplete(String response) {
 			if (!TextUtils.isEmpty(response)) {
 				if (response.startsWith("{\"statuses\"")) {
-					// 调用 StatusList#parse 解析字符串成微博列表对象
 					Favorite.parse(response);
 					StatusList statuses = StatusList.parse(response);
 					if (statuses != null && statuses.total_number > 0&& statuses.statusList!=null) {
 						since_id=statuses.statusList.get(0).id;
 						for(int i=0;i<statuses.statusList.size();i++){
 							addToList(i, statuses);
-							if(!list.contains(entity)){
+							if(!list.contains(entity)&& mIsrefresh){//刷新
+								list.add(i, entity);
+							}else{
 								list.add(entity);
 							}
 						}
 						Toast.makeText(getActivity(), "刷新"+statuses.statusList.size()+"条微博", Toast.LENGTH_SHORT).show();
-						adapter.onDateChange(list);
+						showListView(list);
 						mDataHelper.saveNlist(list);
 					}else{
 						Toast.makeText(getActivity(), "没有新微薄", Toast.LENGTH_SHORT).show();
@@ -429,6 +423,7 @@ public class fragment1 extends Fragment implements ILoadListener
 			}
 		}
 	};
+
 	/**
 	 * list赋值
 	 * @param i

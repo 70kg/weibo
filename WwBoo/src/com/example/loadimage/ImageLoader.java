@@ -30,7 +30,7 @@ public class ImageLoader {
 			.synchronizedMap(new WeakHashMap<ImageView, String>());
 	// 绾跨▼姹�
 	private ExecutorService executorService;
-
+	private boolean lock;
 	public ImageLoader(Context context) {
 		fileCache = new FileCache(context);
 		executorService = Executors.newFixedThreadPool(5);
@@ -99,25 +99,35 @@ public class ImageLoader {
 		// 鏈�悗浠庢寚瀹氱殑url涓笅杞藉浘鐗�
 		try {
 			Bitmap bitmap = null;
-			URL imageUrl = new URL(url);
-			HttpURLConnection conn = (HttpURLConnection) imageUrl
-					.openConnection();
-			conn.setConnectTimeout(30000);
-			conn.setReadTimeout(30000);
-			conn.setInstanceFollowRedirects(true);
-			InputStream is = conn.getInputStream();
-			OutputStream os = new FileOutputStream(f);
-			CopyStream(is, os);
-			os.close();
+			if(!lock){
+				URL imageUrl = new URL(url);
+				HttpURLConnection conn = (HttpURLConnection) imageUrl
+						.openConnection();
+				conn.setConnectTimeout(30000);
+				conn.setReadTimeout(30000);
+				conn.setInstanceFollowRedirects(true);
+				InputStream is = conn.getInputStream();
+				OutputStream os = new FileOutputStream(f);
+				CopyStream(is, os);
+				os.close();
+			}
 			bitmap = decodeFile(f,200,200);
-			//-----------------------------------------------------------
 			return bitmap;
+			//-----------------------------------------------------------
 		} catch (Exception ex) {
 			Log.e("", "getBitmap catch Exception...\nmessage = " + ex.getMessage());
 			return null;
 		}
 	}
-
+	/**
+	 * 加锁  滑动不加载
+	 */
+	public void setlock(boolean lock){
+		this.lock=lock;
+	}
+	public boolean getLock(){
+		return lock;
+	}
 	// decode杩欎釜鍥剧墖骞朵笖鎸夋瘮渚嬬缉鏀句互鍑忓皯鍐呭瓨娑堣�锛岃櫄鎷熸満瀵规瘡寮犲浘鐗囩殑缂撳瓨澶у皬涔熸槸鏈夐檺鍒剁殑
 	private Bitmap decodeFile(File f,int reqWidth, int reqHeight) {
 		try {
@@ -127,22 +137,7 @@ public class ImageLoader {
 			BitmapFactory.decodeStream(new FileInputStream(f), null, options);
 			options.inSampleSize = calculateInSampleSize(options, reqWidth, reqHeight);  
 			options.inJustDecodeBounds = false;  
-			/*// Find the correct scale value. It should be the power of 2.
-			final int REQUIRED_SIZE = 500;
-			int width_tmp = o.outWidth, height_tmp = o.outHeight;
-			int scale = 1;
-			while (true) {
-				if (width_tmp / 2 < REQUIRED_SIZE
-						|| height_tmp / 2 < REQUIRED_SIZE)
-					break;
-				width_tmp /= 2;
-				height_tmp /= 2;
-				scale *= 2;
-			}*/
 
-			// decode with inSampleSize
-			//BitmapFactory.Options o2 = new BitmapFactory.Options();
-			//o2.inSampleSize = scale;
 			return BitmapFactory.decodeStream(new FileInputStream(f), null, options);
 		} catch (FileNotFoundException e) {
 		}

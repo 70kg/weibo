@@ -2,27 +2,62 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical" >
-      <LinearLayout
+    android:orientation="vertical"
+     android:background="@drawable/card_bg" >
+
+    <LinearLayout
+        android:layout_marginTop="5dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:gravity="center_vertical"
         android:orientation="horizontal" >
 
-        <ImageView
+        <com.example.weibo.RoundImageView
             android:id="@+id/comment_pic"
-            android:layout_width="50dp"
-            android:layout_height="50dp" />
+            android:layout_marginLeft="5dp"
+            android:layout_width="45dp"
+            android:layout_height="45dp" />
 
-        <TextView
-            android:id="@+id/comment_name"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+        <LinearLayout
+            android:layout_marginLeft="7dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" >
+
+            <TextView
+                android:id="@+id/comment_name"
+                android:textSize="13sp"
+                android:textColor="#000000"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal" >
+
+                <TextView
+                    android:id="@+id/from_type"
+                     android:textColor="#000000"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+                <TextView 
+                    android:layout_marginLeft="10dp"
+                     android:textColor="#000000"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/time"/>
+            </LinearLayout>
+        </LinearLayout>
     </LinearLayout>
 
     <TextView
+        android:layout_marginTop="4dp"
         android:id="@+id/comment_content"
+         android:textColor="#000000"
         android:layout_width="fill_parent"
+          android:autoLink="web"
+          android:textColorLink="#0082CB"
         android:layout_height="wrap_content" />
 
 </LinearLayout>

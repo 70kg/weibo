@@ -2,7 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.weibo"
     android:versionCode="1"
-    android:versionName="1.0" >
+    android:versionName="1.0.1" >
 
     <uses-sdk
         android:minSdkVersion="16"
@@ -12,8 +12,8 @@
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+
     <application
         android:allowBackup="true"
         android:icon="@drawable/logo"
@@ -30,13 +30,18 @@
         </activity>
         <activity android:name="com.example.from_sina.WBAuthCodeActivity" />
         <activity android:name=".weibolistActivity" />
-        <activity android:name="com.example.test_new_function.Animator"/>
-        <activity android:name=".CommentActivity" />
-        <activity android:name="com.example.weibo.UploadWeiBo"></activity>
-        <activity android:name="com.example.bigpic.BigPicActivity" 
-             android:theme="@style/Theme.Translucent"/>
-        <activity android:name="com.example.bigpic.BigPicActivity1" 
-             android:theme="@style/Theme.Translucent"/>
+        <activity android:name="com.example.test_new_function.Animator" />
+        <activity
+            android:name=".CommentActivity"
+            />
+        <activity android:name="com.example.weibo.UploadWeiBo" >
+        </activity>
+        <activity
+            android:name="com.example.bigpic.BigPicActivity"
+            android:theme="@style/Theme.Translucent" />
+        <activity
+            android:name="com.example.bigpic.BigPicActivity1"
+            android:theme="@style/Theme.Translucent" />
         <activity android:name="com.example.disposetext.MentionsActivity" >
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />

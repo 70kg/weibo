@@ -1,10 +1,15 @@
 package com.example.adapter;
 
 import java.util.ArrayList;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import com.example.Util.Entity;
+import com.example.Util.LogUtil;
+import com.example.Util.StringUtil;
 import com.example.loadimage.ImageLoader;
 import com.example.weibo.R;
+import com.example.weibo.RoundImageView;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -36,40 +41,51 @@ public class commentadapter extends BaseAdapter{
 	}
 	@Override
 	public int getCount() {
-		// TODO Auto-generated method stub
 		return list.size();
 	}
-
 	@Override
 	public Object getItem(int position) {
-		// TODO Auto-generated method stub
 		return list.get(position);
 	}
-
 	@Override
 	public long getItemId(int position) {
-		// TODO Auto-generated method stub
 		return position;
 	}
-
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
-		// TODO Auto-generated method stub
 		Entity entity = list.get(position);
 		ViewHolder holder = new ViewHolder();
 		convertView = inflater.inflate(R.layout.comment_item, null);
 		holder.content = (TextView)convertView.findViewById(R.id.comment_content);
 		holder.name= (TextView)convertView.findViewById(R.id.comment_name);
-		holder.pic = (ImageView)convertView.findViewById(R.id.comment_pic);
+		holder.image = (RoundImageView)convertView.findViewById(R.id.comment_pic);
+		holder.from_type = (TextView)convertView.findViewById(R.id.from_type);
+		holder.time = (TextView)convertView.findViewById(R.id.time);
 
 		holder.name.setText(entity.getName());
+		holder.name.getPaint().setFakeBoldText(true);
 		holder.content.setText(entity.getContent());
-		mImageLoader.DisplayImage(entity.getUser_pic(), holder.pic, false);
+		StringUtil.extractMention2Link(holder.content);
+		mImageLoader.DisplayImage(entity.getUser_pic(), holder.image, false);
+		//设置时间和来源
+		if(entity.getTime()!=null){
+			holder.time.setText(entity.getTime().substring(10,16));
+		}
+		if(entity.getFrom_type()!=null){
+			String type = entity.getFrom_type();
+			Pattern p = Pattern.compile("\\>(.*?)\\<");
+			Matcher m = p.matcher(type);
+			while(m.find()){
+				holder.from_type.setText(m.group(1));
+			}
+		}
 		return convertView;
 	}
 	class ViewHolder{
-		ImageView pic;
+		RoundImageView image;
 		TextView name;
+		TextView from_type;
+		TextView time;
 		TextView content;
 	}
 }

@@ -1,5 +1,8 @@
 package com.example.autoloadlistview;
 
+import com.example.Util.LogUtil;
+import com.example.loadimage.ImageLoader;
+
 import android.content.Context;
 import android.util.AttributeSet;
 import android.util.Log;
@@ -10,7 +13,7 @@ import android.widget.ListView;
 public class AutoLoadListView extends ListView implements OnScrollListener{
 	int totalItemCount;
 	int lastVisibleItem;
-	
+	ImageLoader imageLoader;
 	public AutoLoadListView(Context context, AttributeSet attrs, int defStyle) {
 		super(context, attrs, defStyle);
 		// TODO Auto-generated constructor stub
@@ -39,9 +42,10 @@ public class AutoLoadListView extends ListView implements OnScrollListener{
 	public void setOnLoadNextListener(OnLoadNextListener listener) {
 		mLoadNextListener = listener;
 	}
-
+	
 	@Override
 	public void onScrollStateChanged(AbsListView view, int scrollState) {
+		
 		if (lastVisibleItem == totalItemCount
 				&& totalItemCount != 0
 				&& totalItemCount != (getHeaderViewsCount() + getFooterViewsCount())
@@ -54,14 +58,14 @@ public class AutoLoadListView extends ListView implements OnScrollListener{
 	@Override
 	public void onScroll(AbsListView view, int firstVisibleItem,
 			int visibleItemCount, int totalItemCount) {
-		
+
 		this.lastVisibleItem = firstVisibleItem+visibleItemCount;
 		this.totalItemCount = totalItemCount;
 		if (mLoadingFooter.getState() == LoadingFooter.State.Loading
 				|| mLoadingFooter.getState() == LoadingFooter.State.TheEnd) {
 			return;
 		}
-		
+
 	}
 
 	public void setState(LoadingFooter.State status) {
@@ -75,8 +79,8 @@ public class AutoLoadListView extends ListView implements OnScrollListener{
 	public interface OnLoadNextListener {
 		public void onLoadNext();
 	}
-	
-	
-	
+
+
+
 
 }
