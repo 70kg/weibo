@@ -193,7 +193,7 @@ public class Myadapter extends BaseAdapter implements OnClickListener{
 		}
 		//评论 转发 点赞--------------
 
-		if(entity.getReposts_count() !=0&&(int)holder.repost_img.getTag()==entity.getReposts_count()){
+		if(entity.getReposts_count() !=0){
 			holder.repost_counts.setVisibility(View.VISIBLE);
 			holder.repost_counts.setText(entity.getReposts_count()+"");
 			holder.repost_img.setVisibility(View.VISIBLE);
@@ -440,7 +440,7 @@ public class Myadapter extends BaseAdapter implements OnClickListener{
 					if(image.getTag() ==pic2.get(i)){
 						holder.image1.setVisibility(View.VISIBLE);
 						holder.image1.setBackgroundResource(R.drawable.re_beijing);
-						
+
 						mImageLoader.DisplayImage(new_pic_url, image, false);	
 					}else{
 						image.setVisibility(View.GONE);
@@ -578,6 +578,6 @@ public class Myadapter extends BaseAdapter implements OnClickListener{
 		return lage_url;
 
 	}
-	
+
 
 }

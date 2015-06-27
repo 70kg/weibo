@@ -4,10 +4,9 @@
 	<classpathentry exported="true" kind="con" path="com.android.ide.eclipse.adt.ANDROID_FRAMEWORK"/>
 	<classpathentry exported="true" kind="con" path="com.android.ide.eclipse.adt.DEPENDENCIES"/>
 	<classpathentry exported="true" kind="lib" path="libs/weibosdkcore.jar"/>
-	<classpathentry exported="true" kind="src" path="/appcompat_v7"/>
 	<classpathentry exported="true" kind="lib" path="libs/weibosdk.jar"/>
+	<classpathentry combineaccessrules="false" exported="true" kind="src" path="/WeiboSDK"/>
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="src" path="gen"/>
-	<classpathentry combineaccessrules="false" exported="true" kind="src" path="/WeiboSDK"/>
 	<classpathentry kind="output" path="bin/classes"/>
 </classpath>
