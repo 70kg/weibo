@@ -3,12 +3,6 @@ import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 
-/**
- * �жϵ�ǰ�ֻ����������
- * 
- * @author Administrator
- * 
- */
 public class NetUtil
 {
 	/**

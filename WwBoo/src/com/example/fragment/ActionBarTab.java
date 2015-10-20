@@ -1,7 +1,5 @@
 package com.example.fragment;
 
-import java.lang.reflect.Method;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,9 +10,7 @@ import com.example.from_sina.Constants;
 import com.example.from_sina.WBAuthCodeActivity;
 import com.example.loadimage.ImageLoader;
 import com.example.tab_view.TabBarView;
-import com.example.weibo.MainActivity;
 import com.example.weibo.R;
-import com.example.weibo.UploadWeiBo;
 import com.sina.weibo.sdk.auth.Oauth2AccessToken;
 import com.sina.weibo.sdk.auth.WeiboAuth;
 import com.sina.weibo.sdk.auth.WeiboAuthListener;
@@ -25,11 +21,9 @@ import com.sina.weibo.sdk.net.RequestListener;
 import com.sina.weibo.sdk.net.WeiboParameters;
 import com.sina.weibo.sdk.openapi.UsersAPI;
 import com.sina.weibo.sdk.openapi.legacy.GroupAPI;
-import com.sina.weibo.sdk.openapi.models.ErrorInfo;
 import com.sina.weibo.sdk.openapi.models.GroupList;
 import com.sina.weibo.sdk.openapi.models.User;
 import com.sina.weibo.sdk.utils.LogUtil;
-import com.sina.weibo.sdk.utils.UIUtils;
 
 import android.app.ActionBar;
 import android.app.ActionBar.LayoutParams;
@@ -38,16 +32,12 @@ import android.app.ActionBar.Tab;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
-import android.graphics.Color;
-import android.graphics.Matrix;
 import android.graphics.drawable.ColorDrawable;
-import android.net.wifi.WifiConfiguration.Status;
 import android.os.Bundle;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
-import android.support.v4.view.ViewPager.OnPageChangeListener;
 import android.support.v4.widget.DrawerLayout;
 import android.text.TextUtils;
 import android.util.Log;

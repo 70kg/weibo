@@ -18,20 +18,18 @@ public class weibolist extends ListView implements OnScrollListener {
 
 
 	public weibolist(Context context,AttributeSet attrs ) {
-		// TODO Auto-generated constructor stub
 		super(context, attrs);
 		initView(context);
 	}
 	public weibolist(Context context,AttributeSet attrs,int defStyle ) {
-		// TODO Auto-generated constructor stub
-		super(context, attrs,defStyle);		initView(context);
+		super(context, attrs,defStyle);		
+		initView(context);
 
 	}
 
 	public weibolist(Context context) {
-		super(context);		initView(context);
-
-		// TODO Auto-generated constructor stub
+		super(context);		
+		initView(context);
 	}
 	@Override
 	public void onScrollStateChanged(AbsListView view, int scrollState) {
@@ -62,8 +60,8 @@ public class weibolist extends ListView implements OnScrollListener {
 
 		this.setOnScrollListener(this);
 	}
-	
-	
+
+
 	public void loadcomplete(){
 		isloading=false;
 		footer.findViewById(R.id.load_layout).setVisibility(View.GONE);

@@ -2,7 +2,6 @@ package com.example.weibo;
 
 
 
-import android.R.animator;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -36,10 +35,6 @@ public class MainActivity extends Activity {
 	EditText editView;
 
 	Button  button4;
-	private static final String PREFERENCES_NAME = "com_weibo_sdk_android";
-	private static final String KEY_UID           = "uid";
-	private static final String KEY_ACCESS_TOKEN  = "access_token";
-	private static final String KEY_EXPIRES_IN    = "expires_in";
 	/** 用户信息接口 */
 	private UsersAPI mUsersAPI;
 	Button button2 ;
@@ -93,7 +88,6 @@ public class MainActivity extends Activity {
 			public void onClick(View v) {
 				token=AccessTokenKeeper.readAccessToken(MainActivity.this);
 				String ui = token.getUid();
-				String format = getString(R.string.weibosdk_demo_token_to_string_format_1);
 				Log.e("token.getToken()", token.getToken());
 				Log.e("uid", ui+"");
 				//Toast.makeText(MainActivity.this, String.format(format, token.getToken(), 1500).show();
